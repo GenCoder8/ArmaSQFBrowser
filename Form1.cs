@@ -14,9 +14,12 @@ namespace ArmaSQFBrowser
 
   List<Match> foundMatches = new List<Match>();
 
-  //searchString();
+   //searchString();
+   filesProcessed.Text = "";
 
-  Thread worker = new Thread(new ThreadStart(() => searchString("functions_f.pbo", foundMatches)) );
+   numFiles++;
+
+   Thread worker = new Thread(new ThreadStart(() => searchString("functions_f.pbo", foundMatches)) );
 
    worker.Start();
 
@@ -50,7 +53,8 @@ namespace ArmaSQFBrowser
 
   public string matchString;
 
-
+  int numFiles = 0;
+  int numFilesDone = 0;
 
   private void searchString(string pboName, List<Match> foundMatches)
   {
@@ -61,7 +65,7 @@ namespace ArmaSQFBrowser
 
     var entries = pbo.GetDataEntries();
 
-    numEntries.Text = entries.Count().ToString();
+    filesProcessed.Text = entries.Count().ToString();
 
     int num = 50;
 
@@ -120,6 +124,10 @@ namespace ArmaSQFBrowser
    {
     MessageBox.Show(e.ToString());
    }
+
+   numFilesDone++;
+
+   filesProcessed.Text = numFilesDone.ToString() + " / " + numFiles.ToString();
   }
 
   private void matchesList_SelectedIndexChanged(object sender, EventArgs e)
@@ -139,7 +147,7 @@ namespace ArmaSQFBrowser
    fileView.SelectionColor = Color.Red;
 
 
-   fileView.SelectionStart = 152;
+   fileView.SelectionStart = (match.matchIndex - 200);
    fileView.SelectionLength = 0;
 
    fileView.ScrollToCaret();

@@ -29,7 +29,7 @@
   private void InitializeComponent()
   {
    matchesList = new ListBox();
-   numEntries = new Label();
+   filesProcessed = new Label();
    curEntry = new Label();
    button1 = new Button();
    scriptFilename = new Label();
@@ -48,14 +48,14 @@
    matchesList.TabIndex = 1;
    matchesList.SelectedIndexChanged += matchesList_SelectedIndexChanged;
    // 
-   // numEntries
+   // filesProcessed
    // 
-   numEntries.AutoSize = true;
-   numEntries.Location = new Point(93, 19);
-   numEntries.Name = "numEntries";
-   numEntries.Size = new Size(38, 15);
-   numEntries.TabIndex = 2;
-   numEntries.Text = "label1";
+   filesProcessed.AutoSize = true;
+   filesProcessed.Location = new Point(93, 19);
+   filesProcessed.Name = "filesProcessed";
+   filesProcessed.Size = new Size(38, 15);
+   filesProcessed.TabIndex = 2;
+   filesProcessed.Text = "label1";
    // 
    // curEntry
    // 
@@ -103,7 +103,7 @@
    Controls.Add(scriptFilename);
    Controls.Add(button1);
    Controls.Add(curEntry);
-   Controls.Add(numEntries);
+   Controls.Add(filesProcessed);
    Controls.Add(matchesList);
    Name = "Form1";
    Text = "Form1";
@@ -113,7 +113,7 @@
 
   #endregion
   private ListBox matchesList;
-  private Label numEntries;
+  private Label filesProcessed;
   private Label curEntry;
   private Button button1;
   private Label scriptFilename;
