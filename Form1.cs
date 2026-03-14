@@ -19,6 +19,8 @@ namespace ArmaSQFBrowser
 
   StringBuilder log = new StringBuilder();
 
+  List<string> blacklist = new List<string>();
+
   public Form1()
   {
    InitializeComponent();
@@ -190,8 +192,6 @@ namespace ArmaSQFBrowser
 
      int num = 1;
 
-     log.Append("test log");
-
      int numSqf = 0;
 
      int index = 0;
@@ -250,7 +250,7 @@ namespace ArmaSQFBrowser
      pbo.Dispose();
 
      if(numSqf == 0)
-     log.Append("PBO " + pboName + " does not have any SQF");
+      writeLog("PBO " + pboName + " does not have any SQF");
 
     }
     catch (Exception e)
@@ -311,6 +311,8 @@ namespace ArmaSQFBrowser
 
      readSetting("armaPath", armaPath);
 
+     readList("blacklist", blacklist,100);
+     
     }
    }
 
@@ -330,15 +332,31 @@ namespace ArmaSQFBrowser
   {
    if (xmlRead(name))
    {
-
     ctrl.Text = xmlReader.Value;
+   }
+  }
 
+  private void readList(string prefix, List<string> li, int maxEntries)
+  {
+   for (int index = li.Count; index < maxEntries; index++)
+   {
+    if (xmlRead(prefix + (index + 1).ToString()))
+    {
+     //log("Reading: " + xmlReader.Value);
+     li.Add(xmlReader.Value);
+     //log("Size: " + li.Count);
+    }
    }
   }
 
   private void Form1_FormClosing(object sender, FormClosingEventArgs e)
   {
-   File.AppendAllText("log.txt", log.ToString());
+   File.WriteAllText("log.txt", log.ToString());
+  }
+
+  private void writeLog(string msg)
+  {
+   log.Append(msg + "\n");
   }
  }
 }
