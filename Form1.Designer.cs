@@ -55,9 +55,9 @@
    filesProcessed.AutoSize = true;
    filesProcessed.Location = new Point(46, 43);
    filesProcessed.Name = "filesProcessed";
-   filesProcessed.Size = new Size(47, 15);
+   filesProcessed.Size = new Size(84, 15);
    filesProcessed.TabIndex = 2;
-   filesProcessed.Text = "process";
+   filesProcessed.Text = "files processed";
    // 
    // curEntry
    // 

@@ -2,6 +2,7 @@ using BisUtils.PBO;
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml;
 using static System.Runtime.InteropServices.JavaScript.JSType;
@@ -52,20 +53,21 @@ namespace ArmaSQFBrowser
 
    try
    {
-    matchesList.Items.Clear();
+    showProcessText("Starting");
+
+    clearMatches();
 
     string[] files = Directory.GetFiles(armaPath.Text, "*.pbo", SearchOption.AllDirectories);
 
-    numFilesRead.Text = "Found " + files.Length.ToString() + " files";
+    //numFilesRead.Text = "Found " + files.Length.ToString() + " files";
 
     //searchString();
-    filesProcessed.Text = "";
+   // filesProcessed.Text = "";
 
     numFiles = files.Length;
 
-    showProcessText();
 
-    for (int fi = 0; fi < files.Length; fi += maxThreads)
+    for (int fi = 53; fi < 55; fi += maxThreads)
     {
 
      List<Thread> threads = new List<Thread>();
@@ -89,10 +91,9 @@ namespace ArmaSQFBrowser
       var list = foundMatchesList.Last();
 
       Thread worker = new Thread(new ThreadStart(() => searchString(filename, list)));
+      threads.Add(worker);
 
       worker.Start();
-
-      threads.Add(worker);
      }
 
      int workerI = 0;
@@ -100,12 +101,19 @@ namespace ArmaSQFBrowser
      {
       worker.Join();
 
+      numFilesDone++;
+
+      showProcessText("Processing files... " + numFilesDone.ToString() + " / " + numFiles.ToString());
+
       var matches = foundMatchesList[workerI];
 
       //MessageBox.Show();
       foreach (Match match in matches)
       {
-       matchesList.Items.Add(match.fileName);
+     //  matchesList.Items.Add(match.fileName);
+
+       addToMatches(match.fileName);
+
        allMatches.Add(match);
       }
 
@@ -116,7 +124,10 @@ namespace ArmaSQFBrowser
     }
 
 
-    filesProcessed.Text = "Done";
+
+
+   // Thread.Sleep(2000);
+    showProcessText("Done");
 
 
     /*
@@ -134,9 +145,27 @@ namespace ArmaSQFBrowser
 
   }
 
+  private void addToMatches(string fileName)
+  {
+   if(matchesList.InvokeRequired)
+    matchesList.Invoke(() => addToMatches(fileName));
+   else
+    matchesList.Items.Add(fileName);
+  }
+
+  private void clearMatches()
+  {
+   if (matchesList.InvokeRequired)
+    matchesList.Invoke(() => clearMatches());
+   else
+    matchesList.Items.Clear();
+  }
+
+
+
   private void searchString(string pboName, List<Match> foundMatches)
   {
-   if (false)
+   if (true)
    {
     try
     {
@@ -148,9 +177,9 @@ namespace ArmaSQFBrowser
 
      var entries = pbo.GetDataEntries();
 
-     filesProcessed.Text = entries.Count().ToString();
+     //filesProcessed.Text = entries.Count().ToString();
 
-     int num = 25;
+     int num = 1;
 
      int index = 0;
      foreach (var entry in entries)
@@ -161,7 +190,7 @@ namespace ArmaSQFBrowser
       //var t = Encoding.UTF8.GetString(entry.EntryData);
       //MessageBox.Show(t);
 
-      curEntry.Text = index.ToString();
+      //curEntry.Text = index.ToString();
       index++;
 
       string read = "";
@@ -212,16 +241,15 @@ namespace ArmaSQFBrowser
 
    }
 
-   numFilesDone++;
-
-   showProcessText();
 
   }
 
-  private void showProcessText()
+  private void showProcessText(string msg)
   {
-
-   filesProcessed.Text = "Processing files... " + numFilesDone.ToString() + " / " + numFiles.ToString();
+   if (filesProcessed.InvokeRequired)
+    filesProcessed.Invoke(() => showProcessText(msg));
+   else
+    filesProcessed.Text = msg;
   }
 
   private void matchesList_SelectedIndexChanged(object sender, EventArgs e)
