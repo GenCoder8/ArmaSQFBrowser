@@ -1,5 +1,6 @@
 using BisUtils.PBO;
 using System;
+using System.Collections.Generic;
 using System.Text;
 using System.Windows.Forms;
 using System.Xml;
@@ -18,29 +19,81 @@ namespace ArmaSQFBrowser
 
    readSettings();
 
-  List<Match> foundMatches = new List<Match>();
-
-   //searchString();
-   filesProcessed.Text = "";
-
-   numFiles++;
-
-   showProcessText();
-
-   Thread worker = new Thread(new ThreadStart(() => searchString("functions_f.pbo", foundMatches)) );
-
-   worker.Start();
-
-   worker.Join();
-
-   filesProcessed.Text = "Done";
-
-   matchesList.Items.Clear();
-
-   foreach (Match match in foundMatches)
+   try
    {
-    matchesList.Items.Add(match.fileName);
-    allMatches.Add(match);
+    matchesList.Items.Clear();
+
+    string[] files = Directory.GetFiles(armaPath.Text, "*.pbo", SearchOption.AllDirectories);
+
+    numFilesRead.Text = "Found " + files.Length.ToString() + " files";
+
+    //searchString();
+    filesProcessed.Text = "";
+
+    numFiles++;
+
+    showProcessText();
+
+    for (int fi = 0; fi < 1; fi++)
+    {
+
+     List<Thread> threads = new List<Thread>();
+
+     List<List<Match>> foundMatchesList = new List<List<Match>>();
+
+     for (int fb = 0; fb < 2; fb++)
+     {
+      foundMatchesList.Add(new List<Match>());
+
+      // "functions_f.pbo"
+
+      //MessageBox.Show(">>>> " + files[fb]);
+
+      string filename = files[fi + fb];
+      var list = foundMatchesList.Last();
+
+      Thread worker = new Thread(new ThreadStart(() => searchString(filename, list)));
+
+      worker.Start();
+
+      threads.Add(worker);
+     }
+
+     int workerI = 0;
+     foreach (Thread worker in threads)
+     {
+      worker.Join();
+
+      var matches = foundMatchesList[workerI];
+
+      //MessageBox.Show();
+      foreach (Match match in matches)
+      {
+       matchesList.Items.Add(match.fileName);
+       allMatches.Add(match);
+      }
+
+      workerI++;
+     }
+
+    }
+
+
+    filesProcessed.Text = "Done";
+
+   
+
+    /*
+    foreach (Match match in foundMatches)
+    {
+     matchesList.Items.Add(match.fileName);
+     allMatches.Add(match);
+    }*/
+
+   }
+   catch (Exception e)
+   {
+    MessageBox.Show("Reading fail: " + e.ToString());
    }
 
   }
@@ -71,13 +124,17 @@ namespace ArmaSQFBrowser
 
    try
    {
-    PboFile pbo = new BisUtils.PBO.PboFile("functions_f.pbo");
+    //MessageBox.Show(pboName);
+
+    PboFile pbo = new BisUtils.PBO.PboFile(pboName, PboFileOption.Read);
+
+    //MessageBox.Show("ok!");
 
     var entries = pbo.GetDataEntries();
 
     filesProcessed.Text = entries.Count().ToString();
 
-    int num = 50;
+    int num = 25;
 
     int index = 0;
     foreach (var entry in entries)
@@ -129,6 +186,8 @@ namespace ArmaSQFBrowser
 
      //Thread.Sleep(10);
     }
+
+    pbo.Dispose();
    }
    catch (Exception e)
    {

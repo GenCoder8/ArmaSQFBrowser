@@ -35,6 +35,7 @@
    scriptFilename = new Label();
    fileView = new RichTextBox();
    armaPath = new TextBox();
+   numFilesRead = new Label();
    SuspendLayout();
    // 
    // matchesList
@@ -42,21 +43,21 @@
    matchesList.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
    matchesList.FormattingEnabled = true;
    matchesList.ItemHeight = 15;
-   matchesList.Location = new Point(12, 47);
+   matchesList.Location = new Point(12, 77);
    matchesList.MultiColumn = true;
    matchesList.Name = "matchesList";
-   matchesList.Size = new Size(222, 394);
+   matchesList.Size = new Size(222, 364);
    matchesList.TabIndex = 1;
    matchesList.SelectedIndexChanged += matchesList_SelectedIndexChanged;
    // 
    // filesProcessed
    // 
    filesProcessed.AutoSize = true;
-   filesProcessed.Location = new Point(93, 19);
+   filesProcessed.Location = new Point(46, 43);
    filesProcessed.Name = "filesProcessed";
-   filesProcessed.Size = new Size(38, 15);
+   filesProcessed.Size = new Size(47, 15);
    filesProcessed.TabIndex = 2;
-   filesProcessed.Text = "label1";
+   filesProcessed.Text = "process";
    // 
    // curEntry
    // 
@@ -102,11 +103,21 @@
    armaPath.Size = new Size(434, 23);
    armaPath.TabIndex = 8;
    // 
+   // numFilesRead
+   // 
+   numFilesRead.AutoSize = true;
+   numFilesRead.Location = new Point(46, 14);
+   numFilesRead.Name = "numFilesRead";
+   numFilesRead.Size = new Size(56, 15);
+   numFilesRead.TabIndex = 9;
+   numFilesRead.Text = "num files";
+   // 
    // Form1
    // 
    AutoScaleDimensions = new SizeF(7F, 15F);
    AutoScaleMode = AutoScaleMode.Font;
    ClientSize = new Size(763, 458);
+   Controls.Add(numFilesRead);
    Controls.Add(armaPath);
    Controls.Add(fileView);
    Controls.Add(scriptFilename);
@@ -128,5 +139,6 @@
   private Label scriptFilename;
   private RichTextBox fileView;
   private TextBox armaPath;
+  private Label numFilesRead;
  }
 }
