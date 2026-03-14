@@ -63,14 +63,24 @@ namespace ArmaSQFBrowser
 
     clearMatches();
 
-    string[] files = Directory.GetFiles(armaPath.Text, "*.pbo", SearchOption.AllDirectories);
+    string[] allFiles = Directory.GetFiles(armaPath.Text, "*.pbo", SearchOption.AllDirectories);
+
+    List<string> files = new List<string>();
+
+    foreach (string file in allFiles)
+    {
+     if (!(file.ToLower().Contains("!Workshop".ToLower())))
+      files.Add(file);
+    }
+
+    
 
     //numFilesRead.Text = "Found " + files.Length.ToString() + " files";
 
     //searchString();
     // filesProcessed.Text = "";
 
-    numFiles = files.Length;
+    numFiles = files.Count;
 
 
     for (int fi = 53; fi < 55; fi += maxThreads)
@@ -89,12 +99,12 @@ namespace ArmaSQFBrowser
 
       int nextIndex = fi + fb;
 
-      if (nextIndex >= files.Length)
+      if (nextIndex >= files.Count)
        break;
 
       string filename = files[nextIndex];
 
-      if (stringInList(blacklist, Path.GetFileNameWithoutExtension(filename)))
+      if (subStringInList2(blacklist, filename))
        continue;
 
       foundMatchesList.Add(new List<Match>());
@@ -315,34 +325,53 @@ namespace ArmaSQFBrowser
    return list.Any(tocheck => tocheck.ToLower().Contains(str.ToLower()));
   }
 
+  bool subStringInList2(List<string> list, string str)
+  {
+   return list.Any(toCheck => str.ToLower().Contains(toCheck.ToLower()));
+  }
 
   void readSettings()
   {
-   xmlReader = XmlReader.Create(xmlFilePath, new XmlReaderSettings());
-
-   while (xmlReader.Read())
+   try
    {
-    if (xmlReader.IsStartElement())
+    xmlReader = XmlReader.Create(xmlFilePath, new XmlReaderSettings());
+
+    while (xmlReader.Read())
     {
-
-     readSetting("armaPath", armaPath);
-
-     //readList("blacklist", blacklist,100);
-
-     if (xmlRead("blacklist"))
+     if (xmlReader.IsStartElement())
      {
-      string[] blisted = xmlReader.Value.Split(' ');
 
-      foreach (string str in blisted)
+      readSetting("armaPath", armaPath);
+
+      ////readList("blacklist", blacklist,100);
+
+      if (xmlRead("blacklist"))
       {
-       blacklist.Add(str);
+       string[] blisted = xmlReader.Value.Split(new[] { '\r', '\n', ' ' });
+
+       foreach (string str in blisted)
+       {
+        if (str.Length > 0)
+         blacklist.Add(str);
+       }
+
+       writeLog("Blacklisted " + blacklist.Count.ToString() + " files");
       }
+
      }
-
     }
-   }
 
-   xmlReader.Close();
+    xmlReader.Close();
+
+
+    if (!Directory.Exists(armaPath.Text))
+    throw new Exception("Invalid arma path: '" + armaPath.Text + "'");
+
+   }
+   catch (Exception e)
+   {
+    MessageBox.Show("Setting error " + e.ToString());
+   }
   }
 
   private bool xmlRead(string name)
