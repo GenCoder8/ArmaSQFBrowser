@@ -13,11 +13,42 @@ namespace ArmaSQFBrowser
   XmlReader xmlReader;
   static string xmlFilePath = "settings.xml";
 
+  const int maxThreads = 3;
+
   public Form1()
   {
    InitializeComponent();
 
    readSettings();
+
+   var mainThread = new Thread(new ThreadStart(() => searchFiles()));
+   mainThread.Start();
+  }
+
+  class Match
+  {
+   public string fileContents;
+   public string fileName;
+   public int matchIndex;
+
+   public Match(string fileName, string fileContents,int matchIndex)
+   {
+    this.fileName = fileName;
+    this.fileContents = fileContents;
+    this.matchIndex = matchIndex;
+   }
+  }
+
+  List<Match> allMatches = new List<Match>();
+
+  public string matchString;
+
+  int numFiles = 0;
+  int numFilesDone = 0;
+
+  private void searchFiles()
+  {
+
 
    try
    {
@@ -30,18 +61,18 @@ namespace ArmaSQFBrowser
     //searchString();
     filesProcessed.Text = "";
 
-    numFiles++;
+    numFiles = files.Length;
 
     showProcessText();
 
-    for (int fi = 0; fi < 1; fi++)
+    for (int fi = 0; fi < files.Length; fi += maxThreads)
     {
 
      List<Thread> threads = new List<Thread>();
 
      List<List<Match>> foundMatchesList = new List<List<Match>>();
 
-     for (int fb = 0; fb < 2; fb++)
+     for (int fb = 0; fb < maxThreads; fb++)
      {
       foundMatchesList.Add(new List<Match>());
 
@@ -49,7 +80,12 @@ namespace ArmaSQFBrowser
 
       //MessageBox.Show(">>>> " + files[fb]);
 
-      string filename = files[fi + fb];
+      int nextIndex = fi + fb;
+
+      if (nextIndex >= files.Length)
+       break;
+
+      string filename = files[nextIndex];
       var list = foundMatchesList.Last();
 
       Thread worker = new Thread(new ThreadStart(() => searchString(filename, list)));
@@ -76,12 +112,12 @@ namespace ArmaSQFBrowser
       workerI++;
      }
 
+     // Thread.Sleep(1);
     }
 
 
     filesProcessed.Text = "Done";
 
-   
 
     /*
     foreach (Match match in foundMatches)
@@ -98,100 +134,82 @@ namespace ArmaSQFBrowser
 
   }
 
-  class Match
-  {
-   public string fileContents;
-   public string fileName;
-   public int matchIndex;
-
-   public Match(string fileName, string fileContents,int matchIndex)
-   {
-    this.fileName = fileName;
-    this.fileContents = fileContents;
-    this.matchIndex = matchIndex;
-   }
-  }
-
-  List<Match> allMatches = new List<Match>();
-
-  public string matchString;
-
-  int numFiles = 0;
-  int numFilesDone = 0;
-
   private void searchString(string pboName, List<Match> foundMatches)
   {
-
-   try
+   if (false)
    {
-    //MessageBox.Show(pboName);
-
-    PboFile pbo = new BisUtils.PBO.PboFile(pboName, PboFileOption.Read);
-
-    //MessageBox.Show("ok!");
-
-    var entries = pbo.GetDataEntries();
-
-    filesProcessed.Text = entries.Count().ToString();
-
-    int num = 25;
-
-    int index = 0;
-    foreach (var entry in entries)
+    try
     {
+     //MessageBox.Show(pboName);
 
-     if (Path.GetExtension(entry.EntryName) != ".sqf") continue;
+     PboFile pbo = new BisUtils.PBO.PboFile(pboName, PboFileOption.Read);
 
-     //var t = Encoding.UTF8.GetString(entry.EntryData);
-     //MessageBox.Show(t);
+     //MessageBox.Show("ok!");
 
-     curEntry.Text = index.ToString();
-     index++;
+     var entries = pbo.GetDataEntries();
 
-     string read = "";
-     matchString = "createunit";
+     filesProcessed.Text = entries.Count().ToString();
 
-     var data = entry.EntryData;
+     int num = 25;
 
-     int textLength = 0;
-     for (int i = 0; i < data.Length; i++)
+     int index = 0;
+     foreach (var entry in entries)
      {
-      byte b = data[i];
-      //MessageBox.Show(Convert.ToChar(b).ToString());
 
-      char c = Convert.ToChar(b);
+      if (Path.GetExtension(entry.EntryName) != ".sqf") continue;
 
-      read += c;
+      //var t = Encoding.UTF8.GetString(entry.EntryData);
+      //MessageBox.Show(t);
 
-      if (c != '\n')
-       textLength++;
+      curEntry.Text = index.ToString();
+      index++;
 
-      if (read.Length > matchString.Length)
-       read = read.Remove(0, 1);
+      string read = "";
+      matchString = "createunit";
 
-      if (matchString.Equals(read, StringComparison.OrdinalIgnoreCase))
+      var data = entry.EntryData;
+
+      int textLength = 0;
+      for (int i = 0; i < data.Length; i++)
       {
-       //MessageBox.Show("match!");
+       byte b = data[i];
+       //MessageBox.Show(Convert.ToChar(b).ToString());
 
-       foundMatches.Add(new Match(entry.EntryName,Encoding.UTF8.GetString(data), textLength - matchString.Length));
+       char c = Convert.ToChar(b);
 
-       break;
+       read += c;
+
+       if (c != '\n')
+        textLength++;
+
+       if (read.Length > matchString.Length)
+        read = read.Remove(0, 1);
+
+       if (matchString.Equals(read, StringComparison.OrdinalIgnoreCase))
+       {
+        //MessageBox.Show("match!");
+
+        foundMatches.Add(new Match(entry.EntryName, Encoding.UTF8.GetString(data), textLength - matchString.Length));
+
+        break;
+       }
       }
+      //Console.WriteLine(t);
+
+      num--;
+      if (num < 0)
+       break;
+
+      //Thread.Sleep(10);
      }
-     //Console.WriteLine(t);
 
-     num--;
-     if (num < 0)
-      break;
-
-     //Thread.Sleep(10);
+     pbo.Dispose();
+    }
+    catch (Exception e)
+    {
+     MessageBox.Show(e.ToString());
     }
 
-    pbo.Dispose();
-   }
-   catch (Exception e)
-   {
-    MessageBox.Show(e.ToString());
    }
 
    numFilesDone++;
