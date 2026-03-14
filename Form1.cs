@@ -2,15 +2,21 @@ using BisUtils.PBO;
 using System;
 using System.Text;
 using System.Windows.Forms;
+using System.Xml;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ArmaSQFBrowser
 {
  public partial class Form1 : Form
  {
+  XmlReader xmlReader;
+  static string xmlFilePath = "settings.xml";
+
   public Form1()
   {
    InitializeComponent();
+
+   readSettings();
 
   List<Match> foundMatches = new List<Match>();
 
@@ -19,11 +25,15 @@ namespace ArmaSQFBrowser
 
    numFiles++;
 
+   showProcessText();
+
    Thread worker = new Thread(new ThreadStart(() => searchString("functions_f.pbo", foundMatches)) );
 
    worker.Start();
 
    worker.Join();
+
+   filesProcessed.Text = "Done";
 
    matchesList.Items.Clear();
 
@@ -127,7 +137,14 @@ namespace ArmaSQFBrowser
 
    numFilesDone++;
 
-   filesProcessed.Text = numFilesDone.ToString() + " / " + numFiles.ToString();
+   showProcessText();
+
+  }
+
+  private void showProcessText()
+  {
+
+   filesProcessed.Text = "Processing files... " + numFilesDone.ToString() + " / " + numFiles.ToString();
   }
 
   private void matchesList_SelectedIndexChanged(object sender, EventArgs e)
@@ -157,6 +174,46 @@ namespace ArmaSQFBrowser
   private void button1_Click(object sender, EventArgs e)
   {
 
+  }
+
+  void readSettings()
+  {
+   xmlReader = XmlReader.Create(xmlFilePath, new XmlReaderSettings());
+
+
+   List<string> nopFiles = new List<string>();
+   List<string> noObFiles = new List<string>();
+
+   while (xmlReader.Read())
+   {
+    if (xmlReader.IsStartElement())
+    {
+
+     readSetting("armaPath", armaPath);
+
+    }
+   }
+
+   xmlReader.Close();
+  }
+
+  private bool xmlRead(string name)
+  {
+   if (xmlReader.Name.ToLower() == name.ToLower())
+   {
+    return xmlReader.Read();
+   }
+   return false;
+  }
+
+  private void readSetting(string name, TextBox ctrl)
+  {
+   if (xmlRead(name))
+   {
+
+    ctrl.Text = xmlReader.Value;
+
+   }
   }
  }
 }

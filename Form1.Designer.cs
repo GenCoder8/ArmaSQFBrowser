@@ -34,6 +34,7 @@
    button1 = new Button();
    scriptFilename = new Label();
    fileView = new RichTextBox();
+   armaPath = new TextBox();
    SuspendLayout();
    // 
    // matchesList
@@ -60,7 +61,7 @@
    // curEntry
    // 
    curEntry.AutoSize = true;
-   curEntry.Location = new Point(535, 19);
+   curEntry.Location = new Point(681, 53);
    curEntry.Name = "curEntry";
    curEntry.Size = new Size(38, 15);
    curEntry.TabIndex = 3;
@@ -68,7 +69,7 @@
    // 
    // button1
    // 
-   button1.Location = new Point(338, 27);
+   button1.Location = new Point(516, 53);
    button1.Name = "button1";
    button1.Size = new Size(120, 23);
    button1.TabIndex = 5;
@@ -94,11 +95,19 @@
    fileView.TabIndex = 7;
    fileView.Text = "";
    // 
+   // armaPath
+   // 
+   armaPath.Location = new Point(299, 11);
+   armaPath.Name = "armaPath";
+   armaPath.Size = new Size(434, 23);
+   armaPath.TabIndex = 8;
+   // 
    // Form1
    // 
    AutoScaleDimensions = new SizeF(7F, 15F);
    AutoScaleMode = AutoScaleMode.Font;
    ClientSize = new Size(763, 458);
+   Controls.Add(armaPath);
    Controls.Add(fileView);
    Controls.Add(scriptFilename);
    Controls.Add(button1);
@@ -118,5 +127,6 @@
   private Button button1;
   private Label scriptFilename;
   private RichTextBox fileView;
+  private TextBox armaPath;
  }
 }
