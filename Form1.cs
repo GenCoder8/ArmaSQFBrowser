@@ -6,6 +6,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml;
+using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ArmaSQFBrowser
@@ -307,7 +308,7 @@ namespace ArmaSQFBrowser
 
   bool stringInList(List<string> list, string str)
   {
-   return list.Any(tocheck => tocheck.Equals(str, StringComparison.OrdinalIgnoreCase));
+   return list.Any(toCheck => toCheck.Equals(str, StringComparison.OrdinalIgnoreCase));
   }
   bool subStringInList(List<string> list, string str)
   {
@@ -326,8 +327,18 @@ namespace ArmaSQFBrowser
 
      readSetting("armaPath", armaPath);
 
-     readList("blacklist", blacklist,100);
-     
+     //readList("blacklist", blacklist,100);
+
+     if (xmlRead("blacklist"))
+     {
+      string[] blisted = xmlReader.Value.Split(' ');
+
+      foreach (string str in blisted)
+      {
+       blacklist.Add(str);
+      }
+     }
+
     }
    }
 
