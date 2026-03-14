@@ -81,7 +81,6 @@ namespace ArmaSQFBrowser
 
      for (int fb = 0; fb < maxThreads; fb++)
      {
-      foundMatchesList.Add(new List<Match>());
 
       // "functions_f.pbo"
 
@@ -93,6 +92,12 @@ namespace ArmaSQFBrowser
        break;
 
       string filename = files[nextIndex];
+
+      if (stringInList(blacklist, Path.GetFileNameWithoutExtension(filename)))
+       continue;
+
+      foundMatchesList.Add(new List<Match>());
+
       var list = foundMatchesList.Last();
 
       Thread worker = new Thread(new ThreadStart(() => searchString(filename, list)));
@@ -299,6 +304,16 @@ namespace ArmaSQFBrowser
   {
 
   }
+
+  bool stringInList(List<string> list, string str)
+  {
+   return list.Any(tocheck => tocheck.Equals(str, StringComparison.OrdinalIgnoreCase));
+  }
+  bool subStringInList(List<string> list, string str)
+  {
+   return list.Any(tocheck => tocheck.ToLower().Contains(str.ToLower()));
+  }
+
 
   void readSettings()
   {
