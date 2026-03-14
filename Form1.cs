@@ -1,6 +1,7 @@
 using BisUtils.PBO;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -15,6 +16,8 @@ namespace ArmaSQFBrowser
   static string xmlFilePath = "settings.xml";
 
   const int maxThreads = 3;
+
+  StringBuilder log = new StringBuilder();
 
   public Form1()
   {
@@ -32,7 +35,7 @@ namespace ArmaSQFBrowser
    public string fileName;
    public int matchIndex;
 
-   public Match(string fileName, string fileContents,int matchIndex)
+   public Match(string fileName, string fileContents, int matchIndex)
    {
     this.fileName = fileName;
     this.fileContents = fileContents;
@@ -62,7 +65,7 @@ namespace ArmaSQFBrowser
     //numFilesRead.Text = "Found " + files.Length.ToString() + " files";
 
     //searchString();
-   // filesProcessed.Text = "";
+    // filesProcessed.Text = "";
 
     numFiles = files.Length;
 
@@ -110,7 +113,7 @@ namespace ArmaSQFBrowser
       //MessageBox.Show();
       foreach (Match match in matches)
       {
-     //  matchesList.Items.Add(match.fileName);
+       //  matchesList.Items.Add(match.fileName);
 
        addToMatches(match.fileName);
 
@@ -126,7 +129,7 @@ namespace ArmaSQFBrowser
 
 
 
-   // Thread.Sleep(2000);
+    // Thread.Sleep(2000);
     showProcessText("Done");
 
 
@@ -147,7 +150,7 @@ namespace ArmaSQFBrowser
 
   private void addToMatches(string fileName)
   {
-   if(matchesList.InvokeRequired)
+   if (matchesList.InvokeRequired)
     matchesList.Invoke(() => addToMatches(fileName));
    else
     matchesList.Items.Add(fileName);
@@ -171,6 +174,12 @@ namespace ArmaSQFBrowser
     {
      //MessageBox.Show(pboName);
 
+     var info = new System.IO.FileInfo(pboName);
+
+     if (info.Length > (200 * 1000000))
+      return;
+
+
      PboFile pbo = new BisUtils.PBO.PboFile(pboName, PboFileOption.Read);
 
      //MessageBox.Show("ok!");
@@ -181,11 +190,17 @@ namespace ArmaSQFBrowser
 
      int num = 1;
 
+     log.Append("test log");
+
+     int numSqf = 0;
+
      int index = 0;
      foreach (var entry in entries)
      {
 
       if (Path.GetExtension(entry.EntryName) != ".sqf") continue;
+
+      numSqf++;
 
       //var t = Encoding.UTF8.GetString(entry.EntryData);
       //MessageBox.Show(t);
@@ -233,6 +248,10 @@ namespace ArmaSQFBrowser
      }
 
      pbo.Dispose();
+
+     if(numSqf == 0)
+     log.Append("PBO " + pboName + " does not have any SQF");
+
     }
     catch (Exception e)
     {
@@ -285,10 +304,6 @@ namespace ArmaSQFBrowser
   {
    xmlReader = XmlReader.Create(xmlFilePath, new XmlReaderSettings());
 
-
-   List<string> nopFiles = new List<string>();
-   List<string> noObFiles = new List<string>();
-
    while (xmlReader.Read())
    {
     if (xmlReader.IsStartElement())
@@ -319,6 +334,11 @@ namespace ArmaSQFBrowser
     ctrl.Text = xmlReader.Value;
 
    }
+  }
+
+  private void Form1_FormClosing(object sender, FormClosingEventArgs e)
+  {
+   File.AppendAllText("log.txt", log.ToString());
   }
  }
 }

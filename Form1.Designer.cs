@@ -127,6 +127,7 @@
    Controls.Add(matchesList);
    Name = "Form1";
    Text = "Form1";
+   FormClosing += Form1_FormClosing;
    ResumeLayout(false);
    PerformLayout();
   }
