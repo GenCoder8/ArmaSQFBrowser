@@ -70,7 +70,7 @@
    // 
    // button1
    // 
-   button1.Location = new Point(516, 53);
+   button1.Location = new Point(299, 40);
    button1.Name = "button1";
    button1.Size = new Size(120, 23);
    button1.TabIndex = 5;
@@ -81,7 +81,7 @@
    // scriptFilename
    // 
    scriptFilename.AutoSize = true;
-   scriptFilename.Location = new Point(318, 61);
+   scriptFilename.Location = new Point(299, 77);
    scriptFilename.Name = "scriptFilename";
    scriptFilename.Size = new Size(38, 15);
    scriptFilename.TabIndex = 6;

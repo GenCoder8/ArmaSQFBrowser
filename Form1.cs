@@ -213,7 +213,7 @@ namespace ArmaSQFBrowser
 
      //filesProcessed.Text = entries.Count().ToString();
 
-     int num = 1;
+     int num = 2000;
 
      int numSqf = 0;
 
@@ -268,6 +268,9 @@ namespace ArmaSQFBrowser
      }
 
      pbo.Dispose();
+
+     if (num < 0)
+      writeLog("Max iters reached on '" + pboName + "'");
 
      if (numSqf == 0)
      {
