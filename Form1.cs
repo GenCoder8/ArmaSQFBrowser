@@ -20,7 +20,7 @@ namespace ArmaSQFBrowser
   XmlReader xmlReader;
   static string xmlFilePath = "settings.xml";
 
-  const int maxThreads = 3;
+  const int maxThreads = 5;
 
   StringBuilder log = new StringBuilder();
 
@@ -61,6 +61,10 @@ namespace ArmaSQFBrowser
 
   private void searchFiles()
   {
+   try
+   {
+    var watch = System.Diagnostics.Stopwatch.StartNew();
+
    noSqfFiles = new List<string>();
 
    numFiles = 0;
@@ -68,8 +72,7 @@ namespace ArmaSQFBrowser
 
    allMatches = new List<Match>();
 
-   try
-   {
+
     showProcessText("Starting");
 
     clearMatches();
@@ -88,13 +91,7 @@ namespace ArmaSQFBrowser
         files.Add(file);
     }
 
-     // writeLog($"Skipping too large file '{pboName}'");
- 
-
-    //numFilesRead.Text = "Found " + files.Length.ToString() + " files";
-
-    //searchString();
-    // filesProcessed.Text = "";
+    // writeLog($"Skipping too large file '{pboName}'");
 
     numFiles = files.Count;
 
@@ -108,10 +105,6 @@ namespace ArmaSQFBrowser
 
      for (int fb = 0; fb < maxThreads; fb++)
      {
-
-      // "functions_f.pbo"
-
-      //MessageBox.Show(">>>> " + files[fb]);
 
       int nextIndex = fi + fb;
 
@@ -142,11 +135,8 @@ namespace ArmaSQFBrowser
 
       var matches = foundMatchesList[workerI];
 
-      //MessageBox.Show();
       foreach (Match match in matches)
       {
-       //  matchesList.Items.Add(match.fileName);
-
        addToMatches(match.fileName);
 
        allMatches.Add(match);
@@ -159,10 +149,10 @@ namespace ArmaSQFBrowser
     }
 
 
-
+    watch.Stop();
 
     // Thread.Sleep(2000);
-    showProcessText("Done");
+    showProcessText("Done. Time taken: " + (watch.ElapsedMilliseconds / 1000.0).ToString() + " seconds");
 
     if (noSqfFiles.Count > 0)
     {
@@ -322,11 +312,6 @@ namespace ArmaSQFBrowser
 
   }
 
-  private void button1_Click(object sender, EventArgs e)
-  {
-
-  }
-
   bool stringInList(List<string> list, string str)
   {
    return list.Any(toCheck => toCheck.Equals(str, StringComparison.OrdinalIgnoreCase));
@@ -376,7 +361,7 @@ namespace ArmaSQFBrowser
 
 
     if (!Directory.Exists(armaPath.Text))
-    throw new Exception("Invalid arma path: '" + armaPath.Text + "'");
+     throw new Exception("Invalid arma path: '" + armaPath.Text + "'");
 
    }
    catch (Exception e)
@@ -423,6 +408,11 @@ namespace ArmaSQFBrowser
   private void writeLog(string msg)
   {
    log.Append(msg + "\n");
+  }
+
+  private void startSearch_Click(object sender, EventArgs e)
+  {
+
   }
  }
 }

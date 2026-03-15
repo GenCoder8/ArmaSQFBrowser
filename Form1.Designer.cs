@@ -28,6 +28,7 @@
   /// </summary>
   private void InitializeComponent()
   {
+   components = new System.ComponentModel.Container();
    matchesList = new ListBox();
    filesProcessed = new Label();
    startSearch = new Button();
@@ -36,6 +37,7 @@
    armaPath = new TextBox();
    label1 = new Label();
    searchFor = new TextBox();
+   formTooltips = new ToolTip(components);
    SuspendLayout();
    // 
    // matchesList
@@ -47,12 +49,13 @@
    matchesList.Name = "matchesList";
    matchesList.Size = new Size(322, 469);
    matchesList.TabIndex = 1;
+   formTooltips.SetToolTip(matchesList, "Found matches in SQF files");
    matchesList.SelectedIndexChanged += matchesList_SelectedIndexChanged;
    // 
    // filesProcessed
    // 
    filesProcessed.AutoSize = true;
-   filesProcessed.Location = new Point(12, 43);
+   filesProcessed.Location = new Point(12, 46);
    filesProcessed.Name = "filesProcessed";
    filesProcessed.Size = new Size(84, 15);
    filesProcessed.TabIndex = 2;
@@ -65,8 +68,9 @@
    startSearch.Size = new Size(120, 23);
    startSearch.TabIndex = 5;
    startSearch.Text = "Search";
+   formTooltips.SetToolTip(startSearch, "Start search");
    startSearch.UseVisualStyleBackColor = true;
-   startSearch.Click += button1_Click;
+   startSearch.Click += startSearch_Click;
    // 
    // scriptFilename
    // 
@@ -85,13 +89,15 @@
    fileView.Size = new Size(675, 450);
    fileView.TabIndex = 7;
    fileView.Text = "";
+   formTooltips.SetToolTip(fileView, "File content");
    // 
    // armaPath
    // 
-   armaPath.Location = new Point(147, 11);
+   armaPath.Location = new Point(171, 11);
    armaPath.Name = "armaPath";
    armaPath.Size = new Size(434, 23);
    armaPath.TabIndex = 8;
+   formTooltips.SetToolTip(armaPath, "Arma 3 installation path");
    // 
    // label1
    // 
@@ -104,10 +110,11 @@
    // 
    // searchFor
    // 
-   searchFor.Location = new Point(596, 11);
+   searchFor.Location = new Point(611, 11);
    searchFor.Name = "searchFor";
-   searchFor.Size = new Size(293, 23);
+   searchFor.Size = new Size(278, 23);
    searchFor.TabIndex = 10;
+   formTooltips.SetToolTip(searchFor, "String to search for");
    // 
    // Form1
    // 
@@ -138,5 +145,6 @@
   private TextBox armaPath;
   private Label label1;
   private TextBox searchFor;
+  private ToolTip formTooltips;
  }
 }
