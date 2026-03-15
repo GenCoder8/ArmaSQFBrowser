@@ -341,6 +341,9 @@ namespace ArmaSQFBrowser
 
    writeSetting("armaPath",armaPath.Text);
 
+   writeSetting("searchFor", searchFor.Text);
+
+
    xmlWriter.WriteEndElement();
    xmlWriter.WriteEndDocument();
    xmlWriter.Close();
@@ -365,6 +368,8 @@ namespace ArmaSQFBrowser
      {
 
       readSetting("armaPath", armaPath);
+
+      readSetting("searchFor", searchFor);
 
       ////readList("blacklist", blacklist,100);
 
