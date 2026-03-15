@@ -30,12 +30,11 @@
   {
    matchesList = new ListBox();
    filesProcessed = new Label();
-   curEntry = new Label();
    button1 = new Button();
    scriptFilename = new Label();
    fileView = new RichTextBox();
    armaPath = new TextBox();
-   numFilesRead = new Label();
+   label1 = new Label();
    SuspendLayout();
    // 
    // matchesList
@@ -52,20 +51,11 @@
    // filesProcessed
    // 
    filesProcessed.AutoSize = true;
-   filesProcessed.Location = new Point(46, 43);
+   filesProcessed.Location = new Point(12, 43);
    filesProcessed.Name = "filesProcessed";
    filesProcessed.Size = new Size(84, 15);
    filesProcessed.TabIndex = 2;
    filesProcessed.Text = "files processed";
-   // 
-   // curEntry
-   // 
-   curEntry.AutoSize = true;
-   curEntry.Location = new Point(681, 53);
-   curEntry.Name = "curEntry";
-   curEntry.Size = new Size(38, 15);
-   curEntry.TabIndex = 3;
-   curEntry.Text = "label1";
    // 
    // button1
    // 
@@ -82,16 +72,16 @@
    scriptFilename.AutoSize = true;
    scriptFilename.Location = new Point(340, 77);
    scriptFilename.Name = "scriptFilename";
-   scriptFilename.Size = new Size(38, 15);
+   scriptFilename.Size = new Size(88, 15);
    scriptFilename.TabIndex = 6;
-   scriptFilename.Text = "label1";
+   scriptFilename.Text = "No file selected";
    // 
    // fileView
    // 
    fileView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
    fileView.Location = new Point(340, 96);
    fileView.Name = "fileView";
-   fileView.Size = new Size(675, 455);
+   fileView.Size = new Size(675, 450);
    fileView.TabIndex = 7;
    fileView.Text = "";
    // 
@@ -102,30 +92,29 @@
    armaPath.Size = new Size(434, 23);
    armaPath.TabIndex = 8;
    // 
-   // numFilesRead
+   // label1
    // 
-   numFilesRead.AutoSize = true;
-   numFilesRead.Location = new Point(46, 14);
-   numFilesRead.Name = "numFilesRead";
-   numFilesRead.Size = new Size(56, 15);
-   numFilesRead.TabIndex = 9;
-   numFilesRead.Text = "num files";
+   label1.AutoSize = true;
+   label1.Location = new Point(12, 11);
+   label1.Name = "label1";
+   label1.Size = new Size(39, 15);
+   label1.TabIndex = 9;
+   label1.Text = "Status";
    // 
    // Form1
    // 
    AutoScaleDimensions = new SizeF(7F, 15F);
    AutoScaleMode = AutoScaleMode.Font;
    ClientSize = new Size(1027, 563);
-   Controls.Add(numFilesRead);
+   Controls.Add(label1);
    Controls.Add(armaPath);
    Controls.Add(fileView);
    Controls.Add(scriptFilename);
    Controls.Add(button1);
-   Controls.Add(curEntry);
    Controls.Add(filesProcessed);
    Controls.Add(matchesList);
    Name = "Form1";
-   Text = "Form1";
+   Text = "SQF Browser";
    FormClosing += Form1_FormClosing;
    ResumeLayout(false);
    PerformLayout();
@@ -134,11 +123,10 @@
   #endregion
   private ListBox matchesList;
   private Label filesProcessed;
-  private Label curEntry;
   private Button button1;
   private Label scriptFilename;
   private RichTextBox fileView;
   private TextBox armaPath;
-  private Label numFilesRead;
+  private Label label1;
  }
 }
