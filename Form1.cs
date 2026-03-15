@@ -18,6 +18,8 @@ namespace ArmaSQFBrowser
  public partial class Form1 : Form
  {
   XmlReader xmlReader;
+  XmlTextWriter xmlWriter;
+
   static string xmlSettingsFilePath = "settings.xml";
   static string xmlListsFilePath = "lists.xml";
 
@@ -326,6 +328,29 @@ namespace ArmaSQFBrowser
   bool isBlacklistedItemInList(List<string> list, string str)
   {
    return list.Any(toCheck => str.Contains(toCheck));
+  }
+
+  private void saveSettings()
+  {
+   xmlWriter = new XmlTextWriter(xmlSettingsFilePath, System.Text.Encoding.UTF8);
+   xmlWriter.WriteStartDocument(true);
+   xmlWriter.Formatting = Formatting.Indented;
+   xmlWriter.Indentation = 2;
+
+   xmlWriter.WriteStartElement("Table");
+
+   writeSetting("armaPath",armaPath.Text);
+
+   xmlWriter.WriteEndElement();
+   xmlWriter.WriteEndDocument();
+   xmlWriter.Close();
+  }
+
+  private void writeSetting(string name, string value)
+  {
+   xmlWriter.WriteStartElement(name);
+   xmlWriter.WriteString(value);
+   xmlWriter.WriteEndElement();
   }
 
   void readSettings()
