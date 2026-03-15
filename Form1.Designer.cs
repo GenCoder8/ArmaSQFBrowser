@@ -30,11 +30,12 @@
   {
    matchesList = new ListBox();
    filesProcessed = new Label();
-   button1 = new Button();
+   startSearch = new Button();
    scriptFilename = new Label();
    fileView = new RichTextBox();
    armaPath = new TextBox();
    label1 = new Label();
+   searchFor = new TextBox();
    SuspendLayout();
    // 
    // matchesList
@@ -57,15 +58,15 @@
    filesProcessed.TabIndex = 2;
    filesProcessed.Text = "files processed";
    // 
-   // button1
+   // startSearch
    // 
-   button1.Location = new Point(895, 14);
-   button1.Name = "button1";
-   button1.Size = new Size(120, 23);
-   button1.TabIndex = 5;
-   button1.Text = "button1";
-   button1.UseVisualStyleBackColor = true;
-   button1.Click += button1_Click;
+   startSearch.Location = new Point(895, 11);
+   startSearch.Name = "startSearch";
+   startSearch.Size = new Size(120, 23);
+   startSearch.TabIndex = 5;
+   startSearch.Text = "Search";
+   startSearch.UseVisualStyleBackColor = true;
+   startSearch.Click += button1_Click;
    // 
    // scriptFilename
    // 
@@ -87,7 +88,7 @@
    // 
    // armaPath
    // 
-   armaPath.Location = new Point(299, 11);
+   armaPath.Location = new Point(147, 11);
    armaPath.Name = "armaPath";
    armaPath.Size = new Size(434, 23);
    armaPath.TabIndex = 8;
@@ -101,16 +102,24 @@
    label1.TabIndex = 9;
    label1.Text = "Status";
    // 
+   // searchFor
+   // 
+   searchFor.Location = new Point(596, 11);
+   searchFor.Name = "searchFor";
+   searchFor.Size = new Size(293, 23);
+   searchFor.TabIndex = 10;
+   // 
    // Form1
    // 
    AutoScaleDimensions = new SizeF(7F, 15F);
    AutoScaleMode = AutoScaleMode.Font;
    ClientSize = new Size(1027, 563);
+   Controls.Add(searchFor);
    Controls.Add(label1);
    Controls.Add(armaPath);
    Controls.Add(fileView);
    Controls.Add(scriptFilename);
-   Controls.Add(button1);
+   Controls.Add(startSearch);
    Controls.Add(filesProcessed);
    Controls.Add(matchesList);
    Name = "Form1";
@@ -123,10 +132,11 @@
   #endregion
   private ListBox matchesList;
   private Label filesProcessed;
-  private Button button1;
+  private Button startSearch;
   private Label scriptFilename;
   private RichTextBox fileView;
   private TextBox armaPath;
   private Label label1;
+  private TextBox searchFor;
  }
 }
