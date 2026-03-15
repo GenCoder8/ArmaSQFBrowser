@@ -46,7 +46,7 @@ namespace ArmaSQFBrowser
    }
   }
 
-  List<Match> allMatches = new List<Match>();
+  List<Match> allMatches;
 
   public string matchString;
 
@@ -58,6 +58,11 @@ namespace ArmaSQFBrowser
   private void searchFiles()
   {
    noSqfFiles = new List<string>();
+
+   numFiles = 0;
+   numFilesDone = 0;
+
+   allMatches = new List<Match>();
 
    try
    {
@@ -86,7 +91,7 @@ namespace ArmaSQFBrowser
     numFiles = files.Count;
 
 
-    for (int fi = 0; fi < 55; fi += maxThreads)
+    for (int fi = 0; fi < numFiles; fi += maxThreads)
     {
 
      List<Thread> threads = new List<Thread>();
@@ -151,13 +156,15 @@ namespace ArmaSQFBrowser
     // Thread.Sleep(2000);
     showProcessText("Done");
 
-    writeLog("List of no SQF files:");
-
-    foreach (string file in noSqfFiles)
+    if (noSqfFiles.Count > 0)
     {
-     writeLog(file);
-    }
+     writeLog("List of no SQF files:");
 
+     foreach (string file in noSqfFiles)
+     {
+      writeLog(file);
+     }
+    }
    }
    catch (Exception e)
    {
@@ -197,7 +204,7 @@ namespace ArmaSQFBrowser
      if (info.Length > (200 * 1000000))
       return;
 
-
+     
      PboFile pbo = new BisUtils.PBO.PboFile(pboName, PboFileOption.Read);
 
      //MessageBox.Show("ok!");
@@ -270,6 +277,7 @@ namespace ArmaSQFBrowser
     }
     catch (Exception e)
     {
+     writeLog("Failed to process '" + pboName + "'");
      MessageBox.Show(e.ToString());
     }
 
