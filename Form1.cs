@@ -453,6 +453,8 @@ namespace ArmaSQFBrowser
 
   private void Form1_FormClosing(object sender, FormClosingEventArgs e)
   {
+   saveSettings();
+
    File.WriteAllText("log.txt", log.ToString());
   }
 
