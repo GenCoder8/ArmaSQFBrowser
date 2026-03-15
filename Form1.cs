@@ -218,7 +218,7 @@ namespace ArmaSQFBrowser
      int numLoopsLeft = 2000;
 
 #if QUICK_TEST
-
+     numLoopsLeft = 10;
 #endif
 
      int numSqf = 0;
