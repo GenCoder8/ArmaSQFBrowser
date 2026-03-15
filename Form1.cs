@@ -205,15 +205,12 @@ namespace ArmaSQFBrowser
    {
     try
     {
-     //MessageBox.Show(pboName);
 
      PboFile pbo = new BisUtils.PBO.PboFile(pboName, PboFileOption.Read);
 
-     //MessageBox.Show("ok!");
 
      var entries = pbo.GetDataEntries();
 
-     //filesProcessed.Text = entries.Count().ToString();
 
      int numLoopsLeft = 2000;
 
@@ -264,13 +261,11 @@ namespace ArmaSQFBrowser
         break;
        }
       }
-      //Console.WriteLine(t);
 
       numLoopsLeft--;
       if (numLoopsLeft < 0)
        break;
 
-      //Thread.Sleep(10);
      }
 
      pbo.Dispose();
