@@ -18,7 +18,8 @@ namespace ArmaSQFBrowser
  public partial class Form1 : Form
  {
   XmlReader xmlReader;
-  static string xmlFilePath = "settings.xml";
+  static string xmlSettingsFilePath = "settings.xml";
+  static string xmlListsFilePath = "lists.xml";
 
   const int maxThreads = 5;
 
@@ -31,6 +32,7 @@ namespace ArmaSQFBrowser
    InitializeComponent();
 
    readSettings();
+   readLists();
 
    var mainThread = new Thread(new ThreadStart(() => searchFiles()));
    mainThread.Start();
@@ -330,7 +332,7 @@ namespace ArmaSQFBrowser
   {
    try
    {
-    xmlReader = XmlReader.Create(xmlFilePath, new XmlReaderSettings());
+    xmlReader = XmlReader.Create(xmlSettingsFilePath, new XmlReaderSettings());
 
     while (xmlReader.Read())
     {
@@ -340,6 +342,34 @@ namespace ArmaSQFBrowser
       readSetting("armaPath", armaPath);
 
       ////readList("blacklist", blacklist,100);
+
+     }
+    }
+
+    xmlReader.Close();
+
+
+    if (!Directory.Exists(armaPath.Text))
+     throw new Exception("Invalid arma path: '" + armaPath.Text + "'");
+
+   }
+   catch (Exception e)
+   {
+    MessageBox.Show("Setting error " + e.ToString());
+   }
+  }
+
+  void readLists()
+  {
+   try
+   {
+    xmlReader = XmlReader.Create(xmlListsFilePath, new XmlReaderSettings());
+
+    while (xmlReader.Read())
+    {
+     if (xmlReader.IsStartElement())
+     {
+
 
       if (xmlRead("blacklist"))
       {
@@ -359,14 +389,10 @@ namespace ArmaSQFBrowser
 
     xmlReader.Close();
 
-
-    if (!Directory.Exists(armaPath.Text))
-     throw new Exception("Invalid arma path: '" + armaPath.Text + "'");
-
    }
    catch (Exception e)
    {
-    MessageBox.Show("Setting error " + e.ToString());
+    MessageBox.Show("Lists error " + e.ToString());
    }
   }
 
