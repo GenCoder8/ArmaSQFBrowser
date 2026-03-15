@@ -53,9 +53,11 @@ namespace ArmaSQFBrowser
   int numFiles = 0;
   int numFilesDone = 0;
 
+  List<string> noSqfFiles;
+
   private void searchFiles()
   {
-
+   noSqfFiles = new List<string>();
 
    try
    {
@@ -70,10 +72,11 @@ namespace ArmaSQFBrowser
     foreach (string file in allFiles)
     {
      if (!(file.ToLower().Contains("!Workshop".ToLower())))
-      files.Add(file);
+      if (!isBlacklistedItemInList(blacklist, file))
+       files.Add(file);
     }
 
-    
+
 
     //numFilesRead.Text = "Found " + files.Length.ToString() + " files";
 
@@ -83,7 +86,7 @@ namespace ArmaSQFBrowser
     numFiles = files.Count;
 
 
-    for (int fi = 53; fi < 55; fi += maxThreads)
+    for (int fi = 0; fi < 55; fi += maxThreads)
     {
 
      List<Thread> threads = new List<Thread>();
@@ -104,8 +107,6 @@ namespace ArmaSQFBrowser
 
       string filename = files[nextIndex];
 
-      if (subStringInList2(blacklist, filename))
-       continue;
 
       foundMatchesList.Add(new List<Match>());
 
@@ -150,13 +151,12 @@ namespace ArmaSQFBrowser
     // Thread.Sleep(2000);
     showProcessText("Done");
 
+    writeLog("List of no SQF files:");
 
-    /*
-    foreach (Match match in foundMatches)
+    foreach (string file in noSqfFiles)
     {
-     matchesList.Items.Add(match.fileName);
-     allMatches.Add(match);
-    }*/
+     writeLog(file);
+    }
 
    }
    catch (Exception e)
@@ -210,7 +210,6 @@ namespace ArmaSQFBrowser
 
      int numSqf = 0;
 
-     int index = 0;
      foreach (var entry in entries)
      {
 
@@ -221,8 +220,6 @@ namespace ArmaSQFBrowser
       //var t = Encoding.UTF8.GetString(entry.EntryData);
       //MessageBox.Show(t);
 
-      //curEntry.Text = index.ToString();
-      index++;
 
       string read = "";
       matchString = "createunit";
@@ -265,9 +262,11 @@ namespace ArmaSQFBrowser
 
      pbo.Dispose();
 
-     if(numSqf == 0)
+     if (numSqf == 0)
+     {
       writeLog("PBO " + pboName + " does not have any SQF");
-
+      noSqfFiles.Add(Path.GetFileNameWithoutExtension(pboName));
+     }
     }
     catch (Exception e)
     {
@@ -325,9 +324,9 @@ namespace ArmaSQFBrowser
    return list.Any(tocheck => tocheck.ToLower().Contains(str.ToLower()));
   }
 
-  bool subStringInList2(List<string> list, string str)
+  bool isBlacklistedItemInList(List<string> list, string str)
   {
-   return list.Any(toCheck => str.ToLower().Contains(toCheck.ToLower()));
+   return list.Any(toCheck => str.Contains(toCheck));
   }
 
   void readSettings()
