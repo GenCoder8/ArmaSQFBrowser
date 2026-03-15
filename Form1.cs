@@ -29,6 +29,8 @@ namespace ArmaSQFBrowser
 
   List<string> blacklist = new List<string>();
 
+  string matchString = "createunit";
+
   public Form1()
   {
    InitializeComponent();
@@ -58,8 +60,6 @@ namespace ArmaSQFBrowser
 
   List<Match> allMatches;
 
-  public string matchString;
-
   int numFiles = 0;
   int numFilesDone = 0;
 
@@ -77,7 +77,6 @@ namespace ArmaSQFBrowser
    numFilesDone = 0;
 
    allMatches = new List<Match>();
-
 
     showProcessText("Starting");
 
@@ -204,7 +203,6 @@ namespace ArmaSQFBrowser
 
      PboFile pbo = new BisUtils.PBO.PboFile(pboFile, PboFileOption.Read);
 
-
      var entries = pbo.GetDataEntries();
 
      string pboName = Path.GetFileName(pboFile);
@@ -229,7 +227,7 @@ namespace ArmaSQFBrowser
 
 
       string read = "";
-      matchString = "createunit";
+
 
       var data = entry.EntryData;
 
@@ -237,7 +235,6 @@ namespace ArmaSQFBrowser
       for (int i = 0; i < data.Length; i++)
       {
        byte b = data[i];
-       //MessageBox.Show(Convert.ToChar(b).ToString());
 
        char c = Convert.ToChar(b);
 
@@ -251,7 +248,6 @@ namespace ArmaSQFBrowser
 
        if (matchString.Equals(read, StringComparison.OrdinalIgnoreCase))
        {
-        //MessageBox.Show("match!");
 
         foundMatches.Add(new Match(entry.EntryName, Encoding.UTF8.GetString(data), textLength - matchString.Length, pboName));
 
@@ -373,8 +369,6 @@ namespace ArmaSQFBrowser
       readSetting("armaPath", armaPath);
 
       readSetting("searchFor", searchFor);
-
-      ////readList("blacklist", blacklist,100);
 
      }
     }
