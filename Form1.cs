@@ -45,12 +45,14 @@ namespace ArmaSQFBrowser
    public string fileContents;
    public string fileName;
    public int matchIndex;
+   public string pboName;
 
-   public Match(string fileName, string fileContents, int matchIndex)
+   public Match(string fileName, string fileContents, int matchIndex, string pboName)
    {
     this.fileName = fileName;
     this.fileContents = fileContents;
     this.matchIndex = matchIndex;
+    this.pboName = pboName;
    }
   }
 
@@ -193,18 +195,19 @@ namespace ArmaSQFBrowser
 
 
 
-  private void searchString(string pboName, List<Match> foundMatches)
+  private void searchString(string pboFile, List<Match> foundMatches)
   {
    if (true)
    {
     try
     {
 
-     PboFile pbo = new BisUtils.PBO.PboFile(pboName, PboFileOption.Read);
+     PboFile pbo = new BisUtils.PBO.PboFile(pboFile, PboFileOption.Read);
 
 
      var entries = pbo.GetDataEntries();
 
+     string pboName = Path.GetFileName(pboFile);
 
      int numLoopsLeft = 2000;
 
@@ -250,7 +253,7 @@ namespace ArmaSQFBrowser
        {
         //MessageBox.Show("match!");
 
-        foundMatches.Add(new Match(entry.EntryName, Encoding.UTF8.GetString(data), textLength - matchString.Length));
+        foundMatches.Add(new Match(entry.EntryName, Encoding.UTF8.GetString(data), textLength - matchString.Length, pboName));
 
         break;
        }
@@ -275,7 +278,7 @@ namespace ArmaSQFBrowser
     }
     catch (Exception e)
     {
-     writeLog("Failed to process '" + pboName + "'");
+     writeLog("Failed to process '" + pboFile + "'");
      MessageBox.Show(e.ToString());
     }
 
@@ -302,7 +305,7 @@ namespace ArmaSQFBrowser
 
    fileView.Text = match.fileContents;
 
-   scriptFilename.Text = match.fileName;
+   scriptFilename.Text = match.fileName + " - " + match.pboName;
 
    fileView.SelectionStart = match.matchIndex;
    fileView.SelectionLength = matchString.Length;
