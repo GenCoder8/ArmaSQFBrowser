@@ -44,9 +44,8 @@
    matchesList.FormattingEnabled = true;
    matchesList.ItemHeight = 15;
    matchesList.Location = new Point(12, 77);
-   matchesList.MultiColumn = true;
    matchesList.Name = "matchesList";
-   matchesList.Size = new Size(222, 364);
+   matchesList.Size = new Size(322, 469);
    matchesList.TabIndex = 1;
    matchesList.SelectedIndexChanged += matchesList_SelectedIndexChanged;
    // 
@@ -70,7 +69,7 @@
    // 
    // button1
    // 
-   button1.Location = new Point(299, 40);
+   button1.Location = new Point(895, 14);
    button1.Name = "button1";
    button1.Size = new Size(120, 23);
    button1.TabIndex = 5;
@@ -81,7 +80,7 @@
    // scriptFilename
    // 
    scriptFilename.AutoSize = true;
-   scriptFilename.Location = new Point(299, 77);
+   scriptFilename.Location = new Point(340, 77);
    scriptFilename.Name = "scriptFilename";
    scriptFilename.Size = new Size(38, 15);
    scriptFilename.TabIndex = 6;
@@ -90,9 +89,9 @@
    // fileView
    // 
    fileView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
-   fileView.Location = new Point(275, 96);
+   fileView.Location = new Point(340, 96);
    fileView.Name = "fileView";
-   fileView.Size = new Size(476, 350);
+   fileView.Size = new Size(675, 455);
    fileView.TabIndex = 7;
    fileView.Text = "";
    // 
@@ -116,7 +115,7 @@
    // 
    AutoScaleDimensions = new SizeF(7F, 15F);
    AutoScaleMode = AutoScaleMode.Font;
-   ClientSize = new Size(763, 458);
+   ClientSize = new Size(1027, 563);
    Controls.Add(numFilesRead);
    Controls.Add(armaPath);
    Controls.Add(fileView);

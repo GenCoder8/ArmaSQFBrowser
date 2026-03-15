@@ -1,3 +1,5 @@
+#define QUICK_TEST
+
 using BisUtils.PBO;
 using System;
 using System.Collections.Generic;
@@ -8,6 +10,8 @@ using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
 using static System.Runtime.InteropServices.JavaScript.JSType;
+
+
 
 namespace ArmaSQFBrowser
 {
@@ -76,12 +80,16 @@ namespace ArmaSQFBrowser
 
     foreach (string file in allFiles)
     {
+     var info = new System.IO.FileInfo(file);
+
      if (!(file.ToLower().Contains("!Workshop".ToLower())))
       if (!isBlacklistedItemInList(blacklist, file))
-       files.Add(file);
+       if (info.Length < (200 * 1000000))    // Some size limit in BisUtils, will get stuck if too large
+        files.Add(file);
     }
 
-
+     // writeLog($"Skipping too large file '{pboName}'");
+ 
 
     //numFilesRead.Text = "Found " + files.Length.ToString() + " files";
 
@@ -199,12 +207,6 @@ namespace ArmaSQFBrowser
     {
      //MessageBox.Show(pboName);
 
-     var info = new System.IO.FileInfo(pboName);
-
-     if (info.Length > (200 * 1000000))
-      return;
-
-     
      PboFile pbo = new BisUtils.PBO.PboFile(pboName, PboFileOption.Read);
 
      //MessageBox.Show("ok!");
@@ -213,7 +215,11 @@ namespace ArmaSQFBrowser
 
      //filesProcessed.Text = entries.Count().ToString();
 
-     int num = 2000;
+     int numLoopsLeft = 2000;
+
+#if QUICK_TEST
+
+#endif
 
      int numSqf = 0;
 
@@ -260,8 +266,8 @@ namespace ArmaSQFBrowser
       }
       //Console.WriteLine(t);
 
-      num--;
-      if (num < 0)
+      numLoopsLeft--;
+      if (numLoopsLeft < 0)
        break;
 
       //Thread.Sleep(10);
@@ -269,7 +275,7 @@ namespace ArmaSQFBrowser
 
      pbo.Dispose();
 
-     if (num < 0)
+     if (numLoopsLeft < 0)
       writeLog("Max iters reached on '" + pboName + "'");
 
      if (numSqf == 0)
