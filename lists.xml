@@ -1,7 +1,18 @@
 <?xml version="1.0" encoding="utf-8" standalone="yes"?>
 <Table>
 
+
+<!-- Excluded PBO files -->
+
+<!-- DLCs and other excluded -->
+
+<!-- Missions excluded -->
+
+<!-- Non-SQF files excluded -->
+
 <blacklist>
+
+
 
 bootcamp
 patrol
@@ -12,10 +23,13 @@ mark
 orange
 tacops
 
+
+ 
 MPMissions
 Missions
 missions
 Campaign
+
 
 a3
 3den_language

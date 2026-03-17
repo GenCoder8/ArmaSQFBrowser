@@ -3,6 +3,7 @@
 using BisUtils.PBO;
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -34,6 +35,10 @@ namespace ArmaSQFBrowser
   public Form1()
   {
    InitializeComponent();
+
+   System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
+   FileVersionInfo fvi = FileVersionInfo.GetVersionInfo(assembly.Location);
+   Text += " Version: " + fvi.FileVersion;
 
    readSettings();
    readLists();
@@ -280,7 +285,7 @@ namespace ArmaSQFBrowser
     catch (Exception e)
     {
      writeLog("Failed to process '" + pboFile + "'");
-     MessageBox.Show(e.ToString());
+     MessageBox.Show("Failed to process '" + pboFile + "' " + e.ToString());
     }
 
    }
