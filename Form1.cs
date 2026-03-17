@@ -38,8 +38,10 @@ namespace ArmaSQFBrowser
    readSettings();
    readLists();
 
+#if QUICK_TEST
    var mainThread = new Thread(new ThreadStart(() => searchFiles()));
    mainThread.Start();
+#endif
   }
 
   class Match
@@ -301,7 +303,7 @@ namespace ArmaSQFBrowser
 
    fileView.Text = match.fileContents;
 
-   scriptFilename.Text = match.fileName + " - " + match.pboName;
+   scriptFilename.Text = match.fileName + "  -  " + match.pboName;
 
    fileView.SelectionStart = match.matchIndex;
    fileView.SelectionLength = matchString.Length;
@@ -397,7 +399,6 @@ namespace ArmaSQFBrowser
      if (xmlReader.IsStartElement())
      {
 
-
       if (xmlRead("blacklist"))
       {
        string[] blisted = xmlReader.Value.Split(new[] { '\r', '\n', ' ' });
@@ -467,7 +468,10 @@ namespace ArmaSQFBrowser
 
   private void startSearch_Click(object sender, EventArgs e)
   {
+   matchString = searchFor.Text;
 
+   var mainThread = new Thread(new ThreadStart(() => searchFiles()));
+   mainThread.Start();
   }
  }
 }
