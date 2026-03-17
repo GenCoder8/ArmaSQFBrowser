@@ -39,6 +39,7 @@ namespace ArmaSQFBrowser
    readLists();
 
 #if QUICK_TEST
+   matchString = searchFor.Text;
    var mainThread = new Thread(new ThreadStart(() => searchFiles()));
    mainThread.Start();
 #endif
@@ -250,8 +251,10 @@ namespace ArmaSQFBrowser
 
        if (matchString.Equals(read, StringComparison.OrdinalIgnoreCase))
        {
+        int mi = textLength - matchString.Length;
+        if (mi < 0) mi = 0;
 
-        foundMatches.Add(new Match(entry.EntryName, Encoding.UTF8.GetString(data), textLength - matchString.Length, pboName));
+        foundMatches.Add(new Match(entry.EntryName, Encoding.UTF8.GetString(data), mi, pboName));
 
         break;
        }
@@ -309,8 +312,10 @@ namespace ArmaSQFBrowser
    fileView.SelectionLength = matchString.Length;
    fileView.SelectionColor = Color.Red;
 
+   int sp = (match.matchIndex - 200);
+   if (sp < 0) sp = 0;
 
-   fileView.SelectionStart = (match.matchIndex - 200);
+   fileView.SelectionStart = sp;
    fileView.SelectionLength = 0;
 
    fileView.ScrollToCaret();
