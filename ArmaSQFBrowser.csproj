@@ -6,6 +6,8 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <AssemblyVersion>0.7.0</AssemblyVersion>
+    <Copyright>GenCoder8</Copyright>
   </PropertyGroup>
 
   <ItemGroup>
