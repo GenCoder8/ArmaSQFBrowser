@@ -77,6 +77,8 @@ namespace ArmaSQFBrowser
   {
    try
    {
+    startSearch.Enabled = false;
+
     var watch = System.Diagnostics.Stopwatch.StartNew();
 
    noSqfFiles = new List<string>();
@@ -182,6 +184,7 @@ namespace ArmaSQFBrowser
     MessageBox.Show("Reading fail: " + e.ToString());
    }
 
+   startSearch.Enabled = true;
   }
 
   private void addToMatches(string fileName)
