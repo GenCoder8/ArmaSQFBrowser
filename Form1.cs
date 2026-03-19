@@ -76,6 +76,14 @@ namespace ArmaSQFBrowser
     matchesList.Items.Clear();
   }
 
+  public void setSearchButton(bool enable)
+  {
+   if (matchesList.InvokeRequired)
+    matchesList.Invoke(() => setSearchButton(enable));
+   else
+    MainForm.form.startSearch.Enabled = enable;
+  }
+
 
 
 
@@ -266,7 +274,13 @@ namespace ArmaSQFBrowser
   {
    matchString = searchFor.Text;
 
-   var mainThread = new Thread(new ThreadStart(() => search.searchFiles()));
+   if (matchString.Length == 0)
+   {
+    MessageBox.Show("Must have search string");
+    return;
+   }
+
+    var mainThread = new Thread(new ThreadStart(() => search.searchFiles()));
    mainThread.Start();
   }
  }

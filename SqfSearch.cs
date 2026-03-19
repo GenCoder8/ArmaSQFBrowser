@@ -39,7 +39,10 @@ namespace ArmaSQFBrowser
 
   public void searchFiles()
   {
-   MainForm.form.startSearch.Enabled = false;
+   MainForm.form.setSearchButton(false);
+
+   if (MainForm.form.matchString.Length == 0)
+    throw new Exception("Search string empty");
 
    try
    {
@@ -149,7 +152,7 @@ namespace ArmaSQFBrowser
     MessageBox.Show("Reading fail: " + e.ToString());
    }
 
-   MainForm.form.startSearch.Enabled = true;
+   MainForm.form.setSearchButton(true);
   }
 
 
