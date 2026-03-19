@@ -1,4 +1,4 @@
-#define QUICK_TEST
+//#define RUN_AT_START
 
 using BisUtils.PBO;
 using System;
@@ -51,7 +51,7 @@ namespace ArmaSQFBrowser
 
    search = new SqfSearch();
 
-#if QUICK_TEST
+#if RUN_AT_START
    matchString = searchFor.Text;
    var mainThread = new Thread(new ThreadStart(() => search.searchFiles()));
    mainThread.Start();

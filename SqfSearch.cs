@@ -1,4 +1,6 @@
-﻿using BisUtils.PBO;
+﻿//#define QUICK_TEST
+
+using BisUtils.PBO;
 using System;
 using System.Collections.Generic;
 using System.Linq;
