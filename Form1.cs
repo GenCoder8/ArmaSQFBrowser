@@ -241,7 +241,7 @@ namespace ArmaSQFBrowser
   {
    if (xmlRead(name))
    {
-    ctrl.Text = xmlReader.Value;
+    ctrl.Text = xmlReader.Value.Trim('\r', '\n');
    }
   }
 
