@@ -2,13 +2,16 @@
 <Table>
 
 
-<!-- Excluded PBO files -->
+<!-- List of excluded PBO files -->
+
+
 
 <!-- DLCs and other excluded -->
 
 <!-- Missions excluded -->
 
 <!-- Non-SQF files excluded -->
+
 
 <blacklist>
 

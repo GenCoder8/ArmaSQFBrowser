@@ -16,7 +16,7 @@ using static System.Runtime.InteropServices.JavaScript.JSType;
 
 namespace ArmaSQFBrowser
 {
- public partial class Form1 : Form
+ public partial class MainForm : Form
  {
   XmlReader xmlReader;
   XmlTextWriter xmlWriter;
@@ -24,16 +24,22 @@ namespace ArmaSQFBrowser
   static string xmlSettingsFilePath = "settings.xml";
   static string xmlListsFilePath = "lists.xml";
 
-  const int maxThreads = 5;
-
   StringBuilder log = new StringBuilder();
 
-  List<string> blacklist = new List<string>();
+  public List<string> blacklist = new List<string>();
 
-  string matchString = "createunit";
+  public string matchString = "createunit";
 
-  public Form1()
+  public List<SqfSearch.Match> allMatches;
+
+  public static MainForm form;
+
+  private SqfSearch search;
+
+  public MainForm()
   {
+   form = this;
+
    InitializeComponent();
 
    System.Reflection.Assembly assembly = System.Reflection.Assembly.GetExecutingAssembly();
@@ -43,151 +49,18 @@ namespace ArmaSQFBrowser
    readSettings();
    readLists();
 
+   search = new SqfSearch();
+
 #if QUICK_TEST
    matchString = searchFor.Text;
-   var mainThread = new Thread(new ThreadStart(() => searchFiles()));
+   var mainThread = new Thread(new ThreadStart(() => search.searchFiles()));
    mainThread.Start();
 #endif
   }
 
-  class Match
-  {
-   public string fileContents;
-   public string fileName;
-   public int matchIndex;
-   public string pboName;
-
-   public Match(string fileName, string fileContents, int matchIndex, string pboName)
-   {
-    this.fileName = fileName;
-    this.fileContents = fileContents;
-    this.matchIndex = matchIndex;
-    this.pboName = pboName;
-   }
-  }
-
-  List<Match> allMatches;
-
-  int numFiles = 0;
-  int numFilesDone = 0;
-
-  List<string> noSqfFiles;
-
-  private void searchFiles()
-  {
-   try
-   {
-    startSearch.Enabled = false;
-
-    var watch = System.Diagnostics.Stopwatch.StartNew();
-
-   noSqfFiles = new List<string>();
-
-   numFiles = 0;
-   numFilesDone = 0;
-
-   allMatches = new List<Match>();
-
-    showProcessText("Starting");
-
-    clearMatches();
-
-    string[] allFiles = Directory.GetFiles(armaPath.Text, "*.pbo", SearchOption.AllDirectories);
-
-    List<string> files = new List<string>();
-
-    foreach (string file in allFiles)
-    {
-     var info = new System.IO.FileInfo(file);
-
-     if (!(file.ToLower().Contains("!Workshop".ToLower())))
-      if (!isBlacklistedItemInList(blacklist, file))
-       if (info.Length < (200 * 1000000))    // Some size limit in BisUtils, will get stuck if too large
-        files.Add(file);
-    }
-
-    // writeLog($"Skipping too large file '{pboName}'");
-
-    numFiles = files.Count;
 
 
-    for (int fi = 0; fi < numFiles; fi += maxThreads)
-    {
-
-     List<Thread> threads = new List<Thread>();
-
-     List<List<Match>> foundMatchesList = new List<List<Match>>();
-
-     for (int fb = 0; fb < maxThreads; fb++)
-     {
-
-      int nextIndex = fi + fb;
-
-      if (nextIndex >= files.Count)
-       break;
-
-      string filename = files[nextIndex];
-
-
-      foundMatchesList.Add(new List<Match>());
-
-      var list = foundMatchesList.Last();
-
-      Thread worker = new Thread(new ThreadStart(() => searchString(filename, list)));
-      threads.Add(worker);
-
-      worker.Start();
-     }
-
-     int workerI = 0;
-     foreach (Thread worker in threads)
-     {
-      worker.Join();
-
-      numFilesDone++;
-
-      showProcessText("Processing files... " + numFilesDone.ToString() + " / " + numFiles.ToString());
-
-      var matches = foundMatchesList[workerI];
-
-      foreach (Match match in matches)
-      {
-       addToMatches(match.fileName);
-
-       allMatches.Add(match);
-      }
-
-      workerI++;
-     }
-
-     // Thread.Sleep(1);
-    }
-
-
-    watch.Stop();
-
-    // Thread.Sleep(2000);
-    showProcessText("Done. Time taken: " + (watch.ElapsedMilliseconds / 1000.0).ToString() + " seconds");
-
-    if (noSqfFiles.Count > 0)
-    {
-     writeLog("List of no SQF files:");
-
-     foreach (string file in noSqfFiles)
-     {
-      writeLog(file);
-     }
-    }
-   }
-   catch (Exception e)
-   {
-    MessageBox.Show("Reading fail: " + e.ToString());
-   }
-
-   startSearch.Enabled = true;
-  }
-
-  private void addToMatches(string fileName)
+  public void addToMatches(string fileName)
   {
    if (matchesList.InvokeRequired)
     matchesList.Invoke(() => addToMatches(fileName));
@@ -195,7 +68,7 @@ namespace ArmaSQFBrowser
     matchesList.Items.Add(fileName);
   }
 
-  private void clearMatches()
+  public void clearMatches()
   {
    if (matchesList.InvokeRequired)
     matchesList.Invoke(() => clearMatches());
@@ -205,98 +78,8 @@ namespace ArmaSQFBrowser
 
 
 
-  private void searchString(string pboFile, List<Match> foundMatches)
-  {
-   if (true)
-   {
-    try
-    {
 
-     PboFile pbo = new BisUtils.PBO.PboFile(pboFile, PboFileOption.Read);
-
-     var entries = pbo.GetDataEntries();
-
-     string pboName = Path.GetFileName(pboFile);
-
-     int numLoopsLeft = 2000;
-
-#if QUICK_TEST
-     numLoopsLeft = 10;
-#endif
-
-     int numSqf = 0;
-
-     foreach (var entry in entries)
-     {
-
-      if (Path.GetExtension(entry.EntryName) != ".sqf") continue;
-
-      numSqf++;
-
-      //var t = Encoding.UTF8.GetString(entry.EntryData);
-      //MessageBox.Show(t);
-
-
-      string read = "";
-
-
-      var data = entry.EntryData;
-
-      int textLength = 0;
-      for (int i = 0; i < data.Length; i++)
-      {
-       byte b = data[i];
-
-       char c = Convert.ToChar(b);
-
-       read += c;
-
-       if (c != '\n')
-        textLength++;
-
-       if (read.Length > matchString.Length)
-        read = read.Remove(0, 1);
-
-       if (matchString.Equals(read, StringComparison.OrdinalIgnoreCase))
-       {
-        int mi = textLength - matchString.Length;
-        if (mi < 0) mi = 0;
-
-        foundMatches.Add(new Match(entry.EntryName, Encoding.UTF8.GetString(data), mi, pboName));
-
-        break;
-       }
-      }
-
-      numLoopsLeft--;
-      if (numLoopsLeft < 0)
-       break;
-
-     }
-
-     pbo.Dispose();
-
-     if (numLoopsLeft < 0)
-      writeLog("Max iters reached on '" + pboName + "'");
-
-     if (numSqf == 0)
-     {
-      writeLog("PBO " + pboName + " does not have any SQF");
-      noSqfFiles.Add(Path.GetFileNameWithoutExtension(pboName));
-     }
-    }
-    catch (Exception e)
-    {
-     writeLog("Failed to process '" + pboFile + "'");
-     MessageBox.Show("Failed to process '" + pboFile + "' " + e.ToString());
-    }
-
-   }
-
-
-  }
-
-  private void showProcessText(string msg)
+  public void showProcessText(string msg)
   {
    if (filesProcessed.InvokeRequired)
     filesProcessed.Invoke(() => showProcessText(msg));
@@ -310,7 +93,7 @@ namespace ArmaSQFBrowser
 
    if (index < 0) return;
 
-   Match match = allMatches[index];
+   SqfSearch.Match match = allMatches[index];
 
    fileView.Text = match.fileContents;
 
@@ -339,7 +122,7 @@ namespace ArmaSQFBrowser
    return list.Any(tocheck => tocheck.ToLower().Contains(str.ToLower()));
   }
 
-  bool isBlacklistedItemInList(List<string> list, string str)
+  public bool isBlacklistedItemInList(List<string> list, string str)
   {
    return list.Any(toCheck => str.Contains(toCheck));
   }
@@ -474,7 +257,7 @@ namespace ArmaSQFBrowser
    File.WriteAllText("log.txt", log.ToString());
   }
 
-  private void writeLog(string msg)
+  public void writeLog(string msg)
   {
    log.Append(msg + "\n");
   }
@@ -483,7 +266,7 @@ namespace ArmaSQFBrowser
   {
    matchString = searchFor.Text;
 
-   var mainThread = new Thread(new ThreadStart(() => searchFiles()));
+   var mainThread = new Thread(new ThreadStart(() => search.searchFiles()));
    mainThread.Start();
   }
  }

@@ -1,6 +1,6 @@
 ﻿namespace ArmaSQFBrowser
 {
-    partial class Form1
+    partial class MainForm
     {
         /// <summary>
         ///  Required designer variable.
@@ -116,7 +116,7 @@
    searchFor.TabIndex = 10;
    formTooltips.SetToolTip(searchFor, "String to search for");
    // 
-   // Form1
+   // MainForm
    // 
    AutoScaleDimensions = new SizeF(7F, 15F);
    AutoScaleMode = AutoScaleMode.Font;
@@ -129,7 +129,7 @@
    Controls.Add(startSearch);
    Controls.Add(filesProcessed);
    Controls.Add(matchesList);
-   Name = "Form1";
+   Name = "MainForm";
    Text = "SQF Browser";
    FormClosing += Form1_FormClosing;
    ResumeLayout(false);
@@ -137,14 +137,14 @@
   }
 
   #endregion
-  private ListBox matchesList;
-  private Label filesProcessed;
-  private Button startSearch;
-  private Label scriptFilename;
-  private RichTextBox fileView;
-  private TextBox armaPath;
-  private Label label1;
-  private TextBox searchFor;
-  private ToolTip formTooltips;
+  public ListBox matchesList;
+  public Label filesProcessed;
+  public Button startSearch;
+  public Label scriptFilename;
+  public RichTextBox fileView;
+  public TextBox armaPath;
+  public Label label1;
+  public TextBox searchFor;
+  public ToolTip formTooltips;
  }
 }
