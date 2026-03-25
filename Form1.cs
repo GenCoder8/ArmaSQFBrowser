@@ -32,6 +32,8 @@ namespace ArmaSQFBrowser
 
   public List<SqfSearch.Match> allMatches;
 
+  public Dictionary<string, PboFile> pbos;
+
   public static MainForm form;
 
   private SqfSearch search;
@@ -95,31 +97,6 @@ namespace ArmaSQFBrowser
     filesProcessed.Text = msg;
   }
 
-  private void matchesList_SelectedIndexChanged(object sender, EventArgs e)
-  {
-   int index = matchesList.SelectedIndex;
-
-   if (index < 0) return;
-
-   SqfSearch.Match match = allMatches[index];
-
-   fileView.Text = match.fileContents;
-
-   scriptFilename.Text = match.fileName + "  -  " + match.pboName;
-
-   fileView.SelectionStart = match.matchIndex;
-   fileView.SelectionLength = matchString.Length;
-   fileView.SelectionColor = Color.Red;
-
-   int sp = (match.matchIndex - 200);
-   if (sp < 0) sp = 0;
-
-   fileView.SelectionStart = sp;
-   fileView.SelectionLength = 0;
-
-   fileView.ScrollToCaret();
-
-  }
 
   bool stringInList(List<string> list, string str)
   {
@@ -283,5 +260,52 @@ namespace ArmaSQFBrowser
     var mainThread = new Thread(new ThreadStart(() => search.searchFiles()));
    mainThread.Start();
   }
+
+
+  private void matchesList_SelectedIndexChanged(object sender, EventArgs e)
+  {
+   int index = matchesList.SelectedIndex;
+
+   if (index < 0) return;
+
+   SqfSearch.Match match = allMatches[index];
+
+   fileView.Text = match.fileContents;
+
+   scriptFilename.Text = match.fileName + "  -  " + match.pboName;
+
+   fileView.SelectionStart = match.matchIndex;
+   fileView.SelectionLength = matchString.Length;
+   fileView.SelectionColor = Color.Red;
+
+   int sp = (match.matchIndex - 200);
+   if (sp < 0) sp = 0;
+
+   fileView.SelectionStart = sp;
+   fileView.SelectionLength = 0;
+
+   fileView.ScrollToCaret();
+
+   PboFile pboFile = null;
+
+   MainForm.form.pbos.TryGetValue(match.pboName, out pboFile);
+
+   if (pboFile != null)
+   {
+    var entries = pboFile.GetDataEntries();
+
+    foreach (var entry in entries)
+    {
+     if(entry.EntryName == match.fileName)
+     {
+      MessageBox.Show("test");
+     }
+    }
+
+
+   }
+
+  }
+
  }
 }

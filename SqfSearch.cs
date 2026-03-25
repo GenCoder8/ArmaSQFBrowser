@@ -1,6 +1,7 @@
 ﻿//#define QUICK_TEST
 
 using BisUtils.PBO;
+using BisUtils.PBO.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,6 +57,8 @@ namespace ArmaSQFBrowser
 
     MainForm.form.allMatches = new List<SqfSearch.Match>();
 
+    MainForm.form.pbos = new Dictionary<string, PboFile>();
+
     MainForm.form.showProcessText("Starting");
 
     MainForm.form.clearMatches();
@@ -101,7 +104,11 @@ namespace ArmaSQFBrowser
 
       var list = foundMatchesList.Last();
 
-      Thread worker = new Thread(new ThreadStart(() => searchString(filename, list)));
+      PboFile pboFile = new BisUtils.PBO.PboFile(filename, PboFileOption.Read);
+
+      MainForm.form.pbos.Add(filename, pboFile);
+
+      Thread worker = new Thread(new ThreadStart(() => searchString(pboFile, filename, list)));
       threads.Add(worker);
 
       worker.Start();
@@ -157,18 +164,18 @@ namespace ArmaSQFBrowser
 
 
 
-  private void searchString(string pboFile, List<Match> foundMatches)
+  private void searchString(PboFile pboFile, string filename, List<Match> foundMatches)
   {
    if (true)
    {
     try
     {
 
-     PboFile pbo = new BisUtils.PBO.PboFile(pboFile, PboFileOption.Read);
+     //PboFile pbo = new BisUtils.PBO.PboFile(pboFile, PboFileOption.Read);
 
-     var entries = pbo.GetDataEntries();
+     var entries = pboFile.GetDataEntries();
 
-     string pboName = Path.GetFileName(pboFile);
+     string pboName = filename;
 
      int numLoopsLeft = 2000;
 
@@ -226,7 +233,7 @@ namespace ArmaSQFBrowser
 
      }
 
-     pbo.Dispose();
+    /// pbo.Dispose();
 
      if (numLoopsLeft < 0)
       MainForm.form.writeLog("Max iters reached on '" + pboName + "'");
@@ -239,8 +246,8 @@ namespace ArmaSQFBrowser
     }
     catch (Exception e)
     {
-     MainForm.form.writeLog("Failed to process '" + pboFile + "'");
-     MessageBox.Show("Failed to process '" + pboFile + "' " + e.ToString());
+     MainForm.form.writeLog("Failed to process '" + filename + "'");
+     MessageBox.Show("Failed to process '" + filename + "' " + e.ToString());
     }
 
    }
