@@ -38,6 +38,8 @@
    label1 = new Label();
    searchFor = new TextBox();
    formTooltips = new ToolTip(components);
+   injectCode = new Button();
+   removeCode = new Button();
    SuspendLayout();
    // 
    // matchesList
@@ -47,7 +49,7 @@
    matchesList.ItemHeight = 15;
    matchesList.Location = new Point(12, 77);
    matchesList.Name = "matchesList";
-   matchesList.Size = new Size(322, 469);
+   matchesList.Size = new Size(322, 454);
    matchesList.TabIndex = 1;
    formTooltips.SetToolTip(matchesList, "Found matches in SQF files");
    matchesList.SelectedIndexChanged += matchesList_SelectedIndexChanged;
@@ -86,7 +88,7 @@
    fileView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
    fileView.Location = new Point(340, 96);
    fileView.Name = "fileView";
-   fileView.Size = new Size(675, 450);
+   fileView.Size = new Size(675, 496);
    fileView.TabIndex = 7;
    fileView.Text = "";
    formTooltips.SetToolTip(fileView, "File content");
@@ -116,11 +118,35 @@
    searchFor.TabIndex = 10;
    formTooltips.SetToolTip(searchFor, "String to search for");
    // 
+   // injectCode
+   // 
+   injectCode.Enabled = false;
+   injectCode.Location = new Point(49, 554);
+   injectCode.Name = "injectCode";
+   injectCode.Size = new Size(106, 23);
+   injectCode.TabIndex = 11;
+   injectCode.Text = "Insert code";
+   injectCode.UseVisualStyleBackColor = true;
+   injectCode.Click += injectCode_Click;
+   // 
+   // removeCode
+   // 
+   removeCode.Enabled = false;
+   removeCode.Location = new Point(171, 554);
+   removeCode.Name = "removeCode";
+   removeCode.Size = new Size(106, 23);
+   removeCode.TabIndex = 12;
+   removeCode.Text = "Remove code";
+   removeCode.UseVisualStyleBackColor = true;
+   removeCode.Click += removeCode_Click;
+   // 
    // MainForm
    // 
    AutoScaleDimensions = new SizeF(7F, 15F);
    AutoScaleMode = AutoScaleMode.Font;
-   ClientSize = new Size(1027, 563);
+   ClientSize = new Size(1027, 609);
+   Controls.Add(removeCode);
+   Controls.Add(injectCode);
    Controls.Add(searchFor);
    Controls.Add(label1);
    Controls.Add(armaPath);
@@ -146,5 +172,7 @@
   public Label label1;
   public TextBox searchFor;
   public ToolTip formTooltips;
+  private Button injectCode;
+  private Button removeCode;
  }
 }

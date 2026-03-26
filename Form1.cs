@@ -1,6 +1,7 @@
 //#define RUN_AT_START
 
 using BisUtils.PBO;
+using BisUtils.PBO.Entries;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -10,6 +11,7 @@ using System.Text.RegularExpressions;
 using System.Windows.Forms;
 using System.Xml;
 using System.Xml.Linq;
+using static ArmaSQFBrowser.SqfSearch;
 using static System.Runtime.InteropServices.JavaScript.JSType;
 
 
@@ -38,6 +40,8 @@ namespace ArmaSQFBrowser
 
   private SqfSearch search;
 
+  private SqfSearch.Match selectedMatch = null;
+
   public MainForm()
   {
    form = this;
@@ -54,9 +58,7 @@ namespace ArmaSQFBrowser
    search = new SqfSearch();
 
 #if RUN_AT_START
-   matchString = searchFor.Text;
-   var mainThread = new Thread(new ThreadStart(() => search.searchFiles()));
-   mainThread.Start();
+   beginSearch();
 #endif
   }
 
@@ -83,7 +85,11 @@ namespace ArmaSQFBrowser
    if (matchesList.InvokeRequired)
     matchesList.Invoke(() => setSearchButton(enable));
    else
+   {
     MainForm.form.startSearch.Enabled = enable;
+    MainForm.form.injectCode.Enabled = enable; // Also this
+    MainForm.form.removeCode.Enabled = enable;
+   }
   }
 
 
@@ -121,7 +127,7 @@ namespace ArmaSQFBrowser
 
    xmlWriter.WriteStartElement("Table");
 
-   writeSetting("armaPath",armaPath.Text);
+   writeSetting("armaPath", armaPath.Text);
 
    writeSetting("searchFor", searchFor.Text);
 
@@ -247,8 +253,10 @@ namespace ArmaSQFBrowser
    log.Append(msg + "\n");
   }
 
-  private void startSearch_Click(object sender, EventArgs e)
+  private void beginSearch()
   {
+   selectedMatch = null;
+
    matchString = searchFor.Text;
 
    if (matchString.Length == 0)
@@ -257,8 +265,14 @@ namespace ArmaSQFBrowser
     return;
    }
 
-    var mainThread = new Thread(new ThreadStart(() => search.searchFiles()));
+   var mainThread = new Thread(new ThreadStart(() => search.searchFiles()));
    mainThread.Start();
+
+  }
+
+  private void startSearch_Click(object sender, EventArgs e)
+  {
+   beginSearch();
   }
 
 
@@ -269,6 +283,8 @@ namespace ArmaSQFBrowser
    if (index < 0) return;
 
    SqfSearch.Match match = allMatches[index];
+
+   selectedMatch = match;
 
    fileView.Text = match.fileContents;
 
@@ -286,9 +302,22 @@ namespace ArmaSQFBrowser
 
    fileView.ScrollToCaret();
 
+
+
+  }
+
+  private PboEntry getSelectedFunctionEntry()
+  {
+
+   if (selectedMatch == null)
+   {
+    MessageBox.Show("No entry selected");
+    return null;
+   }
+
    PboFile pboFile = null;
 
-   MainForm.form.pbos.TryGetValue(match.pboName, out pboFile);
+   MainForm.form.pbos.TryGetValue(selectedMatch.pboName, out pboFile);
 
    if (pboFile != null)
    {
@@ -296,16 +325,28 @@ namespace ArmaSQFBrowser
 
     foreach (var entry in entries)
     {
-     if(entry.EntryName == match.fileName)
+     // Match function file name
+     if (entry.EntryName == selectedMatch.fileName)
      {
       MessageBox.Show("test");
+      return entry;
      }
     }
 
-
    }
+   return null;
+  }
+
+  private void injectCode_Click(object sender, EventArgs e)
+  {
+
+   var enetry = getSelectedFunctionEntry();
 
   }
 
+  private void removeCode_Click(object sender, EventArgs e)
+  {
+
+  }
  }
 }
