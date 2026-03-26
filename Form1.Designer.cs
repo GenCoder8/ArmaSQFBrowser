@@ -40,6 +40,7 @@
    formTooltips = new ToolTip(components);
    injectCode = new Button();
    removeCode = new Button();
+   injectedStatus = new Label();
    SuspendLayout();
    // 
    // matchesList
@@ -47,7 +48,7 @@
    matchesList.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
    matchesList.FormattingEnabled = true;
    matchesList.ItemHeight = 15;
-   matchesList.Location = new Point(12, 77);
+   matchesList.Location = new Point(11, 60);
    matchesList.Name = "matchesList";
    matchesList.Size = new Size(322, 454);
    matchesList.TabIndex = 1;
@@ -121,7 +122,7 @@
    // injectCode
    // 
    injectCode.Enabled = false;
-   injectCode.Location = new Point(49, 554);
+   injectCode.Location = new Point(49, 569);
    injectCode.Name = "injectCode";
    injectCode.Size = new Size(106, 23);
    injectCode.TabIndex = 11;
@@ -132,7 +133,7 @@
    // removeCode
    // 
    removeCode.Enabled = false;
-   removeCode.Location = new Point(171, 554);
+   removeCode.Location = new Point(171, 569);
    removeCode.Name = "removeCode";
    removeCode.Size = new Size(106, 23);
    removeCode.TabIndex = 12;
@@ -140,11 +141,21 @@
    removeCode.UseVisualStyleBackColor = true;
    removeCode.Click += removeCode_Click;
    // 
+   // injectedStatus
+   // 
+   injectedStatus.AutoSize = true;
+   injectedStatus.Location = new Point(12, 517);
+   injectedStatus.Name = "injectedStatus";
+   injectedStatus.Size = new Size(38, 15);
+   injectedStatus.TabIndex = 13;
+   injectedStatus.Text = "status";
+   // 
    // MainForm
    // 
    AutoScaleDimensions = new SizeF(7F, 15F);
    AutoScaleMode = AutoScaleMode.Font;
    ClientSize = new Size(1027, 609);
+   Controls.Add(injectedStatus);
    Controls.Add(removeCode);
    Controls.Add(injectCode);
    Controls.Add(searchFor);
@@ -174,5 +185,6 @@
   public ToolTip formTooltips;
   private Button injectCode;
   private Button removeCode;
+  private Label injectedStatus;
  }
 }

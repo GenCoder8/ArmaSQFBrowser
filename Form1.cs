@@ -55,6 +55,8 @@ namespace ArmaSQFBrowser
    readSettings();
    readLists();
 
+   injectedStatus.Text = "";
+
    search = new SqfSearch();
 
 #if RUN_AT_START
@@ -302,11 +304,16 @@ namespace ArmaSQFBrowser
 
    fileView.ScrollToCaret();
 
+   SqfCodeInjector ci = new SqfCodeInjector();
 
+   var entry = getSelectedFunctionEntry();
 
+   var inj = ci.isInjected(entry);
+
+   injectedStatus.Text = "Code injected: " + inj;
   }
 
-  private PboEntry getSelectedFunctionEntry()
+  private PboDataEntry getSelectedFunctionEntry()
   {
 
    if (selectedMatch == null)
@@ -328,7 +335,7 @@ namespace ArmaSQFBrowser
      // Match function file name
      if (entry.EntryName == selectedMatch.fileName)
      {
-      MessageBox.Show("test");
+      //MessageBox.Show("test");
       return entry;
      }
     }
@@ -340,8 +347,8 @@ namespace ArmaSQFBrowser
   private void injectCode_Click(object sender, EventArgs e)
   {
 
-   var enetry = getSelectedFunctionEntry();
-
+   var entry = getSelectedFunctionEntry();
+   
   }
 
   private void removeCode_Click(object sender, EventArgs e)
