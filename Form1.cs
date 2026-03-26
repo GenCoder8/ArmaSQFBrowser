@@ -288,7 +288,11 @@ namespace ArmaSQFBrowser
 
    selectedMatch = match;
 
-   fileView.Text = match.fileContents;
+   var entry = getSelectedFunctionEntry();
+
+   fileView.Text = System.Text.Encoding.UTF8.GetString(entry.EntryData);
+
+   // fileView.Text = match.fileContents;
 
    scriptFilename.Text = match.fileName + "  -  " + match.pboName;
 
@@ -306,7 +310,6 @@ namespace ArmaSQFBrowser
 
    SqfCodeInjector ci = new SqfCodeInjector();
 
-   var entry = getSelectedFunctionEntry();
 
    var inj = ci.isInjected(entry);
 
