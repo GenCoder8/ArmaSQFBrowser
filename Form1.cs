@@ -311,6 +311,9 @@ namespace ArmaSQFBrowser
    var inj = ci.isInjected(entry);
 
    injectedStatus.Text = "Code injected: " + inj;
+
+   injectCode.Enabled = !inj;
+   removeCode.Enabled = inj;
   }
 
   private PboDataEntry getSelectedFunctionEntry()
