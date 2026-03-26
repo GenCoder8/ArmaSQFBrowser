@@ -41,6 +41,7 @@
    injectCode = new Button();
    removeCode = new Button();
    injectedStatus = new Label();
+   injectedCode = new TextBox();
    SuspendLayout();
    // 
    // matchesList
@@ -89,7 +90,7 @@
    fileView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
    fileView.Location = new Point(340, 96);
    fileView.Name = "fileView";
-   fileView.Size = new Size(675, 496);
+   fileView.Size = new Size(675, 418);
    fileView.TabIndex = 7;
    fileView.Text = "";
    formTooltips.SetToolTip(fileView, "File content");
@@ -150,11 +151,21 @@
    injectedStatus.TabIndex = 13;
    injectedStatus.Text = "status";
    // 
+   // injectedCode
+   // 
+   injectedCode.Location = new Point(340, 531);
+   injectedCode.Multiline = true;
+   injectedCode.Name = "injectedCode";
+   injectedCode.Size = new Size(675, 66);
+   injectedCode.TabIndex = 14;
+   injectedCode.TextChanged += textBox1_TextChanged;
+   // 
    // MainForm
    // 
    AutoScaleDimensions = new SizeF(7F, 15F);
    AutoScaleMode = AutoScaleMode.Font;
    ClientSize = new Size(1027, 609);
+   Controls.Add(injectedCode);
    Controls.Add(injectedStatus);
    Controls.Add(removeCode);
    Controls.Add(injectCode);
@@ -186,5 +197,6 @@
   private Button injectCode;
   private Button removeCode;
   private Label injectedStatus;
+  private TextBox injectedCode;
  }
 }

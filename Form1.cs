@@ -32,6 +32,8 @@ namespace ArmaSQFBrowser
 
   public string matchString = "createunit";
 
+  public string codeInjectString = "";
+
   public List<SqfSearch.Match> allMatches;
 
   public Dictionary<string, PboFile> pbos;
@@ -133,7 +135,9 @@ namespace ArmaSQFBrowser
 
    writeSetting("searchFor", searchFor.Text);
 
+   writeSetting("injectedCode", injectedCode.Text);
 
+   
    xmlWriter.WriteEndElement();
    xmlWriter.WriteEndDocument();
    xmlWriter.Close();
@@ -161,6 +165,7 @@ namespace ArmaSQFBrowser
 
       readSetting("searchFor", searchFor);
 
+      readSetting("injectedCode", injectedCode);
      }
     }
 
@@ -361,10 +366,15 @@ namespace ArmaSQFBrowser
   {
 
    var entry = getSelectedFunctionEntry();
-   
+
   }
 
   private void removeCode_Click(object sender, EventArgs e)
+  {
+
+  }
+
+  private void textBox1_TextChanged(object sender, EventArgs e)
   {
 
   }
