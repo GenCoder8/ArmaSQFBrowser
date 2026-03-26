@@ -288,6 +288,13 @@ namespace ArmaSQFBrowser
 
    selectedMatch = match;
 
+   updateSelectedFnc();
+  }
+
+  private void updateSelectedFnc()
+  {
+   var match = selectedMatch;
+
    var entry = getSelectedFunctionEntry();
 
    fileView.Text = System.Text.Encoding.UTF8.GetString(entry.EntryData);
