@@ -329,6 +329,9 @@ namespace ArmaSQFBrowser
 
    injectCode.Enabled = !inj;
    removeCode.Enabled = inj;
+
+
+   isSynced.Text = entry.EntryParent.IsSynchronized.ToString();
   }
 
   private PboDataEntry getSelectedFunctionEntry()

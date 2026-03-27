@@ -42,6 +42,7 @@
    removeCode = new Button();
    injectedStatus = new Label();
    injectedCode = new TextBox();
+   isSynced = new Label();
    SuspendLayout();
    // 
    // matchesList
@@ -160,11 +161,21 @@
    injectedCode.TabIndex = 14;
    injectedCode.TextChanged += textBox1_TextChanged;
    // 
+   // isSynced
+   // 
+   isSynced.AutoSize = true;
+   isSynced.Location = new Point(11, 543);
+   isSynced.Name = "isSynced";
+   isSynced.Size = new Size(55, 15);
+   isSynced.TabIndex = 15;
+   isSynced.Text = "is synced";
+   // 
    // MainForm
    // 
    AutoScaleDimensions = new SizeF(7F, 15F);
    AutoScaleMode = AutoScaleMode.Font;
    ClientSize = new Size(1027, 609);
+   Controls.Add(isSynced);
    Controls.Add(injectedCode);
    Controls.Add(injectedStatus);
    Controls.Add(removeCode);
@@ -198,5 +209,6 @@
   private Button removeCode;
   private Label injectedStatus;
   private TextBox injectedCode;
+  private Label isSynced;
  }
 }
