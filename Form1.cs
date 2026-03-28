@@ -1,4 +1,4 @@
-//#define RUN_AT_START
+#define RUN_AT_START
 
 using BisUtils.PBO;
 using BisUtils.PBO.Entries;
@@ -370,11 +370,34 @@ namespace ArmaSQFBrowser
 
    var entry = getSelectedFunctionEntry();
 
+   SqfCodeInjector ci = new SqfCodeInjector();
+
+   ci.inject(entry,"diag_log 'teeeeeeeeeeeeeeeeest';");
+
+   PboFile pboFile = null;
+
+   MainForm.form.pbos.TryGetValue(selectedMatch.pboName, out pboFile);
+
+   pboFile.SynchronizeStream(false);
+
+   updateSelectedFnc();
   }
 
   private void removeCode_Click(object sender, EventArgs e)
   {
+   var entry = getSelectedFunctionEntry();
 
+   SqfCodeInjector ci = new SqfCodeInjector();
+
+   ci.removeCode(entry);
+
+   PboFile pboFile = null;
+
+   MainForm.form.pbos.TryGetValue(selectedMatch.pboName, out pboFile);
+
+   pboFile.SynchronizeStream(false);
+
+   updateSelectedFnc();
   }
 
   private void textBox1_TextChanged(object sender, EventArgs e)

@@ -38,6 +38,9 @@ namespace ArmaSQFBrowser
    string final = injectedCode.PadRight(maxInjCodeLength, ' ') + orgCode;
 
    entry.EntryData = System.Text.Encoding.UTF8.GetBytes(final);
+
+
+   //MessageBox.Show(System.Text.Encoding.UTF8.GetString(entry.EntryData));
   }
 
   public void removeCode(PboDataEntry entry)
@@ -57,6 +60,7 @@ namespace ArmaSQFBrowser
    byte[] bytes = System.Text.Encoding.UTF8.GetBytes(orgCode);
 
    entry.EntryData = bytes;
+
   }
 
  }
