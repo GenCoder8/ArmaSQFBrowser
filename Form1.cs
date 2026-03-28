@@ -93,6 +93,7 @@ namespace ArmaSQFBrowser
     MainForm.form.startSearch.Enabled = enable;
     MainForm.form.injectCode.Enabled = enable; // Also this
     MainForm.form.removeCode.Enabled = enable;
+    MainForm.form.matchesList.Enabled = enable;
    }
   }
 
@@ -373,28 +374,38 @@ namespace ArmaSQFBrowser
 
   private void injectCode_Click(object sender, EventArgs e)
   {
-   var entry = getSelectedFunctionEntry("sqf");
+   try
+   {
+    var entry = getSelectedFunctionEntry("sqf");
 
-   SqfCodeInjector ci = new SqfCodeInjector();
+    SqfCodeInjector ci = new SqfCodeInjector();
 
-   ci.inject(entry,"diag_log 'teeeeeeeeeeeeeeeeest123';");
+    ci.inject(entry, "diag_log 'teeeeeeeeeeeeeeeeest123';");
 
-   var entrycomp = getSelectedFunctionEntry("sqfc");
-  // entrycomp.EntryData = []; // Destroy compiled sqf
+    var entrycomp = getSelectedFunctionEntry("sqfc");
+    // entrycomp.EntryData = []; // Destroy compiled sqf
 
-   entrycomp.EntryParent.DeleteEntry(entrycomp);
+    entrycomp.EntryParent.DeleteEntry(entrycomp);
 
-   PboFile pboFile = null;
+    PboFile pboFile = null;
 
-   MainForm.form.pbos.TryGetValue(selectedMatch.pboName, out pboFile);
+    MainForm.form.pbos.TryGetValue(selectedMatch.pboName, out pboFile);
 
-   pboFile.SynchronizeStream(false);
+    pboFile.SynchronizeStream(false);
 
-   updateSelectedFnc();
+    updateSelectedFnc();
+
+   }
+   catch (Exception exc)
+   {
+    MessageBox.Show("Code inject failed. " + exc.ToString());
+   }
   }
 
   private void removeCode_Click(object sender, EventArgs e)
   {
+   try
+   {
    var entry = getSelectedFunctionEntry("sqf");
 
    SqfCodeInjector ci = new SqfCodeInjector();
@@ -408,6 +419,12 @@ namespace ArmaSQFBrowser
    pboFile.SynchronizeStream(false);
 
    updateSelectedFnc();
+
+   }
+   catch (Exception exc)
+   {
+    MessageBox.Show("Code remove failed. " + exc.ToString());
+   }
   }
 
   private void textBox1_TextChanged(object sender, EventArgs e)
