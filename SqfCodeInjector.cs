@@ -9,7 +9,7 @@ namespace ArmaSQFBrowser
 {
  internal class SqfCodeInjector
  {
-  string codeInsertPrefix = "//codeMod" + System.Environment.NewLine;
+  string codeInsertPrefix = "//codeMod" + System.Environment.NewLine + System.Environment.NewLine;
   int maxInjCodeLength = 512;
 
   public bool isInjected(PboDataEntry entry)
@@ -32,10 +32,10 @@ namespace ArmaSQFBrowser
 
    int emptyNeeded = maxInjCodeLength - injectedCode.Length;
 
-   if (emptyNeeded < 0)
+   if (emptyNeeded < 5) // space for newline
     throw new Exception("Code too long");
 
-   string final = injectedCode.PadRight(maxInjCodeLength, ' ') + orgCode;
+   string final = injectedCode.PadRight(maxInjCodeLength, ' ') + System.Environment.NewLine + orgCode;
 
    entry.EntryData = System.Text.Encoding.UTF8.GetBytes(final);
 

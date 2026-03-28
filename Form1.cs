@@ -300,7 +300,7 @@ namespace ArmaSQFBrowser
   {
    var match = selectedMatch;
 
-   var entry = getSelectedFunctionEntry();
+   var entry = getSelectedFunctionEntry("sqf");
 
    fileView.Text = System.Text.Encoding.UTF8.GetString(entry.EntryData);
 
@@ -334,7 +334,7 @@ namespace ArmaSQFBrowser
    isSynced.Text = entry.EntryParent.IsSynchronized.ToString();
   }
 
-  private PboDataEntry getSelectedFunctionEntry()
+  private PboDataEntry getSelectedFunctionEntry(string type)
   {
 
    if (selectedMatch == null)
@@ -347,14 +347,20 @@ namespace ArmaSQFBrowser
 
    MainForm.form.pbos.TryGetValue(selectedMatch.pboName, out pboFile);
 
+   //string s = Path.GetFileNameWithoutExtension(selectedMatch.fileName);
+   //string s2 = Path.GetFullPath(selectedMatch.fileName);
+
+   string mstring = selectedMatch.fileName.Substring(0, selectedMatch.fileName.Length - 3) + type;
+
    if (pboFile != null)
    {
     var entries = pboFile.GetDataEntries();
 
     foreach (var entry in entries)
     {
+     
      // Match function file name
-     if (entry.EntryName == selectedMatch.fileName)
+     if (entry.EntryName == mstring)
      {
       //MessageBox.Show("test");
       return entry;
@@ -367,12 +373,14 @@ namespace ArmaSQFBrowser
 
   private void injectCode_Click(object sender, EventArgs e)
   {
-
-   var entry = getSelectedFunctionEntry();
+   var entry = getSelectedFunctionEntry("sqf");
 
    SqfCodeInjector ci = new SqfCodeInjector();
 
    ci.inject(entry,"diag_log 'teeeeeeeeeeeeeeeeest';");
+
+   var entrycomp = getSelectedFunctionEntry("sqfc");
+   entrycomp.EntryData = []; // Destroy compiled sqf
 
    PboFile pboFile = null;
 
@@ -385,7 +393,7 @@ namespace ArmaSQFBrowser
 
   private void removeCode_Click(object sender, EventArgs e)
   {
-   var entry = getSelectedFunctionEntry();
+   var entry = getSelectedFunctionEntry("sqf");
 
    SqfCodeInjector ci = new SqfCodeInjector();
 
