@@ -55,6 +55,14 @@ namespace ArmaSQFBrowser
     numFiles = 0;
     numFilesDone = 0;
 
+    if(MainForm.form.pbos != null)
+    {
+     foreach (var pbo in MainForm.form.pbos)
+     {
+      pbo.Value.Dispose();
+     }
+    }
+
     MainForm.form.allMatches = new List<SqfSearch.Match>();
 
     MainForm.form.pbos = new Dictionary<string, PboFile>();
