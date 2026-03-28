@@ -377,10 +377,12 @@ namespace ArmaSQFBrowser
 
    SqfCodeInjector ci = new SqfCodeInjector();
 
-   ci.inject(entry,"diag_log 'teeeeeeeeeeeeeeeeest';");
+   ci.inject(entry,"diag_log 'teeeeeeeeeeeeeeeeest123';");
 
    var entrycomp = getSelectedFunctionEntry("sqfc");
-   entrycomp.EntryData = []; // Destroy compiled sqf
+  // entrycomp.EntryData = []; // Destroy compiled sqf
+
+   entrycomp.EntryParent.DeleteEntry(entrycomp);
 
    PboFile pboFile = null;
 
