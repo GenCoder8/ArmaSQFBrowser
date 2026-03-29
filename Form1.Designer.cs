@@ -50,9 +50,9 @@
    matchesList.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
    matchesList.FormattingEnabled = true;
    matchesList.ItemHeight = 15;
-   matchesList.Location = new Point(11, 60);
+   matchesList.Location = new Point(11, 75);
    matchesList.Name = "matchesList";
-   matchesList.Size = new Size(322, 454);
+   matchesList.Size = new Size(322, 514);
    matchesList.TabIndex = 1;
    formTooltips.SetToolTip(matchesList, "Found matches in SQF files");
    matchesList.SelectedIndexChanged += matchesList_SelectedIndexChanged;
@@ -88,10 +88,10 @@
    // 
    // fileView
    // 
-   fileView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left | AnchorStyles.Right;
+   fileView.Anchor = AnchorStyles.Top | AnchorStyles.Bottom | AnchorStyles.Left;
    fileView.Location = new Point(340, 96);
    fileView.Name = "fileView";
-   fileView.Size = new Size(675, 418);
+   fileView.Size = new Size(675, 493);
    fileView.TabIndex = 7;
    fileView.Text = "";
    formTooltips.SetToolTip(fileView, "File content");
@@ -124,7 +124,7 @@
    // injectCode
    // 
    injectCode.Enabled = false;
-   injectCode.Location = new Point(49, 569);
+   injectCode.Location = new Point(1052, 297);
    injectCode.Name = "injectCode";
    injectCode.Size = new Size(106, 23);
    injectCode.TabIndex = 11;
@@ -135,7 +135,7 @@
    // removeCode
    // 
    removeCode.Enabled = false;
-   removeCode.Location = new Point(171, 569);
+   removeCode.Location = new Point(1193, 297);
    removeCode.Name = "removeCode";
    removeCode.Size = new Size(106, 23);
    removeCode.TabIndex = 12;
@@ -146,7 +146,7 @@
    // injectedStatus
    // 
    injectedStatus.AutoSize = true;
-   injectedStatus.Location = new Point(12, 517);
+   injectedStatus.Location = new Point(1021, 99);
    injectedStatus.Name = "injectedStatus";
    injectedStatus.Size = new Size(38, 15);
    injectedStatus.TabIndex = 13;
@@ -154,17 +154,18 @@
    // 
    // injectedCode
    // 
-   injectedCode.Location = new Point(340, 531);
+   injectedCode.Anchor = AnchorStyles.Top | AnchorStyles.Left | AnchorStyles.Right;
+   injectedCode.Location = new Point(1021, 173);
    injectedCode.Multiline = true;
    injectedCode.Name = "injectedCode";
-   injectedCode.Size = new Size(675, 66);
+   injectedCode.Size = new Size(320, 109);
    injectedCode.TabIndex = 14;
    injectedCode.TextChanged += textBox1_TextChanged;
    // 
    // isSynced
    // 
    isSynced.AutoSize = true;
-   isSynced.Location = new Point(11, 543);
+   isSynced.Location = new Point(1021, 130);
    isSynced.Name = "isSynced";
    isSynced.Size = new Size(55, 15);
    isSynced.TabIndex = 15;
@@ -174,7 +175,7 @@
    // 
    AutoScaleDimensions = new SizeF(7F, 15F);
    AutoScaleMode = AutoScaleMode.Font;
-   ClientSize = new Size(1027, 609);
+   ClientSize = new Size(1353, 609);
    Controls.Add(isSynced);
    Controls.Add(injectedCode);
    Controls.Add(injectedStatus);
@@ -188,7 +189,10 @@
    Controls.Add(startSearch);
    Controls.Add(filesProcessed);
    Controls.Add(matchesList);
+   MaximizeBox = false;
+   MinimizeBox = false;
    Name = "MainForm";
+   StartPosition = FormStartPosition.CenterScreen;
    Text = "SQF Browser";
    FormClosing += Form1_FormClosing;
    ResumeLayout(false);

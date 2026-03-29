@@ -44,6 +44,8 @@ namespace ArmaSQFBrowser
 
   private SqfSearch.Match selectedMatch = null;
 
+  private SqfCodeInjector codeInjector = null;
+
   public MainForm()
   {
    form = this;
@@ -60,6 +62,12 @@ namespace ArmaSQFBrowser
    injectedStatus.Text = "";
 
    search = new SqfSearch();
+
+   codeInjector = new SqfCodeInjector();
+
+   isSynced.Text = "";
+
+   
 
 #if RUN_AT_START
    beginSearch();
@@ -324,7 +332,7 @@ namespace ArmaSQFBrowser
    SqfCodeInjector ci = new SqfCodeInjector();
 
 
-   var inj = ci.isInjected(entry);
+   var inj = codeInjector.isInjected(entry);
 
    injectedStatus.Text = "Code injected: " + inj;
 
@@ -332,7 +340,7 @@ namespace ArmaSQFBrowser
    removeCode.Enabled = inj;
 
 
-   isSynced.Text = entry.EntryParent.IsSynchronized.ToString();
+   isSynced.Text = "Is PBO synchronized: " + entry.EntryParent.IsSynchronized.ToString();
   }
 
   private PboDataEntry getSelectedFunctionEntry(string type)
@@ -378,9 +386,7 @@ namespace ArmaSQFBrowser
    {
     var entry = getSelectedFunctionEntry("sqf");
 
-    SqfCodeInjector ci = new SqfCodeInjector();
-
-    ci.inject(entry, "diag_log 'teeeeeeeeeeeeeeeeest123';");
+    codeInjector.inject(entry, "diag_log 'teeeeeeeeeeeeeeeeest123';");
 
     var entrycomp = getSelectedFunctionEntry("sqfc");
     // entrycomp.EntryData = []; // Destroy compiled sqf
@@ -408,9 +414,7 @@ namespace ArmaSQFBrowser
    {
    var entry = getSelectedFunctionEntry("sqf");
 
-   SqfCodeInjector ci = new SqfCodeInjector();
-
-   ci.removeCode(entry);
+   codeInjector.removeCode(entry);
 
    PboFile pboFile = null;
 

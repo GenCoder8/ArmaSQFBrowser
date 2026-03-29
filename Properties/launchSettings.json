@@ -1,0 +1,8 @@
+{
+  "profiles": {
+    "ArmaSQFBrowser": {
+      "commandName": "Project",
+      "hotReloadEnabled": false
+    }
+  }
+}
