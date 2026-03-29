@@ -391,16 +391,23 @@ namespace ArmaSQFBrowser
     }
     var entry = getSelectedFunctionEntry("sqf");
 
+    if (entry == null) { throw new Exception("Failed to find script"); };
+
     codeInjector.inject(entry, injectedCode.Text);
 
     var entrycomp = getSelectedFunctionEntry("sqfc");
     // entrycomp.EntryData = []; // Destroy compiled sqf
 
-    entrycomp.EntryParent.DeleteEntry(entrycomp);
+    if (entrycomp != null) // If compiled sqf found
+    {
+     entrycomp.EntryParent.DeleteEntry(entrycomp); // Delete compiled sqf
+    }
 
     PboFile pboFile = null;
 
     MainForm.form.pbos.TryGetValue(selectedMatch.pboName, out pboFile);
+
+    if (pboFile == null) throw new Exception("Failed to get PBO handle");
 
     pboFile.SynchronizeStream(false);
 
@@ -419,13 +426,17 @@ namespace ArmaSQFBrowser
    {
    var entry = getSelectedFunctionEntry("sqf");
 
-   codeInjector.removeCode(entry);
+   if (entry == null) { throw new Exception ("Failed to find script"); }
+    
+    codeInjector.removeCode(entry);
 
    PboFile pboFile = null;
 
    MainForm.form.pbos.TryGetValue(selectedMatch.pboName, out pboFile);
 
-   pboFile.SynchronizeStream(false);
+    if (pboFile == null) throw new Exception("Failed to get PBO handle");
+
+    pboFile.SynchronizeStream(false);
 
    updateSelectedFnc();
 
