@@ -384,9 +384,14 @@ namespace ArmaSQFBrowser
   {
    try
    {
+    if(injectedCode.Text.Length == 0)
+    {
+     MessageBox.Show("Enter code to inject");
+     return;
+    }
     var entry = getSelectedFunctionEntry("sqf");
 
-    codeInjector.inject(entry, "diag_log 'teeeeeeeeeeeeeeeeest123';");
+    codeInjector.inject(entry, injectedCode.Text);
 
     var entrycomp = getSelectedFunctionEntry("sqfc");
     // entrycomp.EntryData = []; // Destroy compiled sqf
