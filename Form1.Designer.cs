@@ -43,6 +43,9 @@
    injectedStatus = new Label();
    injectedCode = new TextBox();
    isSynced = new Label();
+   label2 = new Label();
+   label3 = new Label();
+   label4 = new Label();
    SuspendLayout();
    // 
    // matchesList
@@ -171,11 +174,41 @@
    isSynced.TabIndex = 15;
    isSynced.Text = "is synced";
    // 
+   // label2
+   // 
+   label2.AutoSize = true;
+   label2.Location = new Point(1021, 353);
+   label2.Name = "label2";
+   label2.Size = new Size(91, 15);
+   label2.TabIndex = 16;
+   label2.Text = "Format options:";
+   // 
+   // label3
+   // 
+   label3.AutoSize = true;
+   label3.Location = new Point(1029, 378);
+   label3.Name = "label3";
+   label3.Size = new Size(83, 15);
+   label3.TabIndex = 17;
+   label3.Text = "{0} = Filename";
+   // 
+   // label4
+   // 
+   label4.AutoSize = true;
+   label4.Location = new Point(1029, 393);
+   label4.Name = "label4";
+   label4.Size = new Size(102, 15);
+   label4.TabIndex = 18;
+   label4.Text = "{1} = Match string";
+   // 
    // MainForm
    // 
    AutoScaleDimensions = new SizeF(7F, 15F);
    AutoScaleMode = AutoScaleMode.Font;
    ClientSize = new Size(1353, 609);
+   Controls.Add(label4);
+   Controls.Add(label3);
+   Controls.Add(label2);
    Controls.Add(isSynced);
    Controls.Add(injectedCode);
    Controls.Add(injectedStatus);
@@ -214,5 +247,8 @@
   private Label injectedStatus;
   private TextBox injectedCode;
   private Label isSynced;
+  private Label label2;
+  private Label label3;
+  private Label label4;
  }
 }

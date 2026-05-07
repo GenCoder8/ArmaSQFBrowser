@@ -67,7 +67,8 @@ namespace ArmaSQFBrowser
 
    isSynced.Text = "";
 
-   
+
+   updateSelectedFnc();
 
 #if RUN_AT_START
    beginSearch();
@@ -99,8 +100,8 @@ namespace ArmaSQFBrowser
    else
    {
     MainForm.form.startSearch.Enabled = enable;
-    MainForm.form.injectCode.Enabled = enable; // Also this
-    MainForm.form.removeCode.Enabled = enable;
+    //MainForm.form.injectCode.Enabled = enable; // Also this
+    //MainForm.form.removeCode.Enabled = enable;
     MainForm.form.matchesList.Enabled = enable;
    }
   }
@@ -309,6 +310,13 @@ namespace ArmaSQFBrowser
   {
    var match = selectedMatch;
 
+   if(match == null)
+   {
+    injectCode.Enabled = false;
+    removeCode.Enabled = false;
+    return;
+   }
+
    var entry = getSelectedFunctionEntry("sqf");
 
    fileView.Text = System.Text.Encoding.UTF8.GetString(entry.EntryData);
@@ -393,7 +401,11 @@ namespace ArmaSQFBrowser
 
     if (entry == null) { throw new Exception("Failed to find script"); };
 
-    codeInjector.inject(entry, injectedCode.Text);
+    string ftext = string.Format(injectedCode.Text, entry.EntryName, matchString);
+    //MessageBox.Show(ftext);
+    //return;
+
+    codeInjector.inject(entry, ftext);
 
     var entrycomp = getSelectedFunctionEntry("sqfc");
     // entrycomp.EntryData = []; // Destroy compiled sqf
