@@ -313,7 +313,7 @@ namespace ArmaSQFBrowser
 
   private void updateSelectedFnc()
   {
-   if (updatingSelected) return;
+   if (updatingSelected) return; // Dont allow recursive calls
 
    var match = selectedMatch;
 
@@ -351,9 +351,8 @@ namespace ArmaSQFBrowser
 
    var inj = codeInjector.isInjected(entry);
 
-
+   // Injected status in file list
    matchesList.Items[matchesList.SelectedIndex] = match.fileName + getIsInjectedString(inj);
-
 
 
    injectedStatus.Text = "Code injected: " + inj;
@@ -398,7 +397,7 @@ namespace ArmaSQFBrowser
    return null;
   }
 
-  public PboDataEntry findEntryFromPbo(PboFile pboFile,string matchString)
+  public PboDataEntry findEntryFromPbo(PboFile pboFile,string filename)
   {
    var entries = pboFile.GetDataEntries();
 
@@ -406,7 +405,7 @@ namespace ArmaSQFBrowser
    {
 
     // Match function file name
-    if (entry.EntryName == matchString)
+    if (entry.EntryName == filename)
     {
      //MessageBox.Show("test");
      return entry;

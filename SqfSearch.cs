@@ -150,16 +150,9 @@ namespace ArmaSQFBrowser
 
         SqfCodeInjector ci = new SqfCodeInjector();
 
-        if (ci.isInjected(entry))
+        if (ci.isInjected(entry)) // Check Iinjected status for file list
          injStatus = MainForm.form.getIsInjectedString(true);
        }
-
-
-
-       //var entry = getSelectedFunctionEntry("sqf");
-       //var inj = codeInjector.isInjected(entry);
-
-       // fileView.Text = System.Text.Encoding.UTF8.GetString(entry.EntryData);
 
 
        MainForm.form.addToMatches(match.fileName + injStatus);
