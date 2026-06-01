@@ -352,7 +352,7 @@ namespace ArmaSQFBrowser
    var inj = codeInjector.isInjected(entry);
 
 
-   matchesList.Items[matchesList.SelectedIndex] = match.fileName + isInjectedString(inj);
+   matchesList.Items[matchesList.SelectedIndex] = match.fileName + getIsInjectedString(inj);
 
 
 
@@ -367,7 +367,7 @@ namespace ArmaSQFBrowser
    updatingSelected = false;
   }
 
-  public string isInjectedString(bool isInj)
+  public string getIsInjectedString(bool isInj)
   {
    if (isInj) return " (i)";
    return "";

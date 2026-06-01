@@ -151,7 +151,7 @@ namespace ArmaSQFBrowser
         SqfCodeInjector ci = new SqfCodeInjector();
 
         if (ci.isInjected(entry))
-         injStatus = MainForm.form.isInjectedString(true);
+         injStatus = MainForm.form.getIsInjectedString(true);
        }
 
 
