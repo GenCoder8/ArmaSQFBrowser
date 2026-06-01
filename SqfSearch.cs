@@ -134,13 +134,13 @@ namespace ArmaSQFBrowser
 
       var matches = foundMatchesList[workerI];
 
-      string injStatus = "";
 
       foreach (Match match in matches)
       {
 
        // Mark in list if has injected code
        PboFile pboFile = null;
+       string injStatus = "";
 
        MainForm.form.pbos.TryGetValue(match.pboName, out pboFile);
 
