@@ -2,6 +2,8 @@
 
 using BisUtils.PBO;
 using BisUtils.PBO.Entries;
+using BisUtils.PBO.Interfaces;
+using Microsoft.VisualBasic;
 using System;
 using System.Collections.Generic;
 using System.Diagnostics;
@@ -367,23 +369,28 @@ namespace ArmaSQFBrowser
    //string s = Path.GetFileNameWithoutExtension(selectedMatch.fileName);
    //string s2 = Path.GetFullPath(selectedMatch.fileName);
 
-   string mstring = selectedMatch.fileName.Substring(0, selectedMatch.fileName.Length - 3) + type;
-
    if (pboFile != null)
    {
-    var entries = pboFile.GetDataEntries();
+    string mstring = selectedMatch.fileName.Substring(0, selectedMatch.fileName.Length - 3) + type;
 
-    foreach (var entry in entries)
+    return findEntryFromPbo(pboFile, mstring);
+   }
+   return null;
+  }
+
+  public PboDataEntry findEntryFromPbo(PboFile pboFile,string matchString)
+  {
+   var entries = pboFile.GetDataEntries();
+
+   foreach (var entry in entries)
+   {
+
+    // Match function file name
+    if (entry.EntryName == matchString)
     {
-     
-     // Match function file name
-     if (entry.EntryName == mstring)
-     {
-      //MessageBox.Show("test");
-      return entry;
-     }
+     //MessageBox.Show("test");
+     return entry;
     }
-
    }
    return null;
   }

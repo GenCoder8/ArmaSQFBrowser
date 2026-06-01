@@ -1,6 +1,7 @@
 ﻿//#define QUICK_TEST
 
 using BisUtils.PBO;
+using BisUtils.PBO.Entries;
 using BisUtils.PBO.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -133,9 +134,35 @@ namespace ArmaSQFBrowser
 
       var matches = foundMatchesList[workerI];
 
+      string injStatus = "";
+
       foreach (Match match in matches)
       {
-       MainForm.form.addToMatches(match.fileName);
+
+       // Mark in list if has injected code
+       PboFile pboFile = null;
+
+       MainForm.form.pbos.TryGetValue(match.pboName, out pboFile);
+
+       if (pboFile != null)
+       {
+        PboDataEntry entry = MainForm.form.findEntryFromPbo(pboFile, match.fileName);
+
+        SqfCodeInjector ci = new SqfCodeInjector();
+
+        if (ci.isInjected(entry))
+         injStatus = " (i)";
+       }
+
+
+
+       //var entry = getSelectedFunctionEntry("sqf");
+       //var inj = codeInjector.isInjected(entry);
+
+       // fileView.Text = System.Text.Encoding.UTF8.GetString(entry.EntryData);
+
+
+       MainForm.form.addToMatches(match.fileName + injStatus);
 
        MainForm.form.allMatches.Add(match);
       }
