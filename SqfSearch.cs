@@ -98,7 +98,7 @@ namespace ArmaSQFBrowser
 
      List<List<Match>> foundMatchesList = new List<List<Match>>();
 
-     // Start threads for the pbo files
+     // Start threads for the pbo files. can run only maxThreads at a time
      for (int fb = 0; fb < maxThreads; fb++)
      {
 
