@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
+using System.Reflection;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
@@ -308,8 +309,12 @@ namespace ArmaSQFBrowser
    updateSelectedFnc();
   }
 
+  bool updatingSelected = false;
+
   private void updateSelectedFnc()
   {
+   if (updatingSelected) return;
+
    var match = selectedMatch;
 
    if(match == null)
@@ -318,6 +323,8 @@ namespace ArmaSQFBrowser
     removeCode.Enabled = false;
     return;
    }
+
+   updatingSelected = true;
 
    var entry = getSelectedFunctionEntry("sqf");
 
@@ -344,6 +351,11 @@ namespace ArmaSQFBrowser
 
    var inj = codeInjector.isInjected(entry);
 
+
+   matchesList.Items[matchesList.SelectedIndex] = match.fileName + isInjectedString(inj);
+
+
+
    injectedStatus.Text = "Code injected: " + inj;
 
    injectCode.Enabled = !inj;
@@ -351,6 +363,14 @@ namespace ArmaSQFBrowser
 
 
    isSynced.Text = "Is PBO synchronized: " + entry.EntryParent.IsSynchronized.ToString();
+
+   updatingSelected = false;
+  }
+
+  public string isInjectedString(bool isInj)
+  {
+   if (isInj) return " (i)";
+   return "";
   }
 
   private PboDataEntry getSelectedFunctionEntry(string type)
