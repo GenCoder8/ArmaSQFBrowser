@@ -98,6 +98,7 @@ namespace ArmaSQFBrowser
 
      List<List<Match>> foundMatchesList = new List<List<Match>>();
 
+     // Start threads for the pbo files
      for (int fb = 0; fb < maxThreads; fb++)
      {
 
@@ -124,6 +125,7 @@ namespace ArmaSQFBrowser
      }
 
      int workerI = 0;
+     // When done working with thread list the files found from the pbo
      foreach (Thread worker in threads)
      {
       worker.Join();
@@ -142,19 +144,20 @@ namespace ArmaSQFBrowser
        PboFile pboFile = null;
        string injStatus = "";
 
+       // Check if this match has injected code
        MainForm.form.pbos.TryGetValue(match.pboName, out pboFile);
 
-       if (pboFile != null)
+       if (pboFile != null) // would be bug
        {
         PboDataEntry entry = MainForm.form.findEntryFromPbo(pboFile, match.fileName);
 
         SqfCodeInjector ci = new SqfCodeInjector();
 
-        if (ci.isInjected(entry)) // Check Iinjected status for file list
+        if (ci.isInjected(entry)) // Check injected status for file list
          injStatus = MainForm.form.getIsInjectedString(true);
        }
 
-
+       // Add to listbox
        MainForm.form.addToMatches(match.fileName + injStatus);
 
        MainForm.form.allMatches.Add(match);
