@@ -90,7 +90,7 @@ namespace ArmaSQFBrowser
 
     numFiles = files.Count;
 
-
+    // loop through all the pbos and find function files that contain the search string
     for (int fi = 0; fi < numFiles; fi += maxThreads)
     {
 
@@ -134,7 +134,7 @@ namespace ArmaSQFBrowser
 
       MainForm.form.showProcessText("Processing files... " + numFilesDone.ToString() + " / " + numFiles.ToString());
 
-      var matches = foundMatchesList[workerI];
+      var matches = foundMatchesList[workerI]; // Matches from pbo
 
 
       foreach (Match match in matches)
